@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "run-all": "ts-node index"
+    "start": "ts-node index"
   },
   "repository": {
     "type": "git",
