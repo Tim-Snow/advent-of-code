@@ -5,7 +5,7 @@ use std::fs::{read_to_string, File};
 use std::io::Write;
 use std::time::Instant;
 
-pub async fn get_day_data(day: u16, year: u16) -> String {
+pub async fn get_day_data(day: u8, year: u16) -> String {
     let path = format!("res/{year}/{day}.txt");
     let file = File::open(&path);
 
@@ -50,7 +50,7 @@ fn get_client() -> Client {
 pub fn log_result(day: u8, year: u16, pt1: &str, pt2: &str, started_at: Instant) {
     println!(
         "\n{}\nPart 1: {}\nPart 2: {}\nExecution time: {}",
-        format!("Year {year} - Day {day}").blue().bold().underline(),
+        format!("{year} - Day {day}").blue().bold().underline(),
         pt1.green(),
         pt2.green(),
         format!("{:?}", started_at.elapsed()).yellow().bold()
