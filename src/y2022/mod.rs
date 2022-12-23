@@ -13,7 +13,7 @@ pub async fn run() {
     match day {
         Err(_) => {
             println!("Day not provided, running all");
-            join![day1::run()];
+            join![day1::run(), day2::run(), day3::run(), day5::run()];
         }
         Ok(d) => match d.parse::<u8>() {
             Ok(d) => match d {
@@ -27,7 +27,7 @@ pub async fn run() {
             },
             Err(_) => {
                 println!("Could not parse day: '{d}' to int, running all");
-                join![day1::run()];
+                join![day1::run(), day2::run(), day3::run(), day5::run()];
             }
         },
     }
