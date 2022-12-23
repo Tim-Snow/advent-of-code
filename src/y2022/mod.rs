@@ -1,6 +1,9 @@
 use futures::join;
 
 mod day1;
+mod day2;
+mod day3;
+mod day5;
 
 pub async fn run() {
     println!("Year 2022");
@@ -15,7 +18,11 @@ pub async fn run() {
         Ok(d) => match d.parse::<u8>() {
             Ok(d) => match d {
                 1 => day1::run().await,
-                2..=25 => panic!("Day {d} not implemented"),
+                2 => day2::run().await,
+                3 => day3::run().await,
+                4 => panic!("Day {d} not implemented"),
+                5 => day5::run().await,
+                6..=25 => panic!("Day {d} not implemented"),
                 _ => panic!("Invalid day: {d}"),
             },
             Err(_) => {
