@@ -5,7 +5,6 @@ mod y2022;
 use futures::join;
 
 #[tokio::main]
-
 async fn main() {
     dotenv::dotenv().ok();
 
