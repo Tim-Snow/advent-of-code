@@ -15,6 +15,6 @@ COOKIE="" # Your session cookie header, inspect network logs in browser to find 
 
 ## Running
 
-To run rust solutions use: `cargo run`
+To run rust solutions use: `yarn rust` or `cargo run`
 
-To run typescript solutions use: `yarn start`
+To run typescript solutions use: `yarn ts`

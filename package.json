@@ -1,22 +1,13 @@
 {
   "name": "advent-of-code",
   "version": "1.0.0",
-  "description": "",
+  "description": "Advent of code",
   "main": "src/index.ts",
+  "private": true,
   "scripts": {
-    "start": "ts-node src/index"
+    "ts": "ts-node src/index",
+    "rust": "cargo run"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Tim-Snow/advent-of-code.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Tim-Snow/advent-of-code/issues"
-  },
-  "homepage": "https://github.com/Tim-Snow/advent-of-code#readme",
   "devDependencies": {
     "@types/node": "^18.11.17",
     "@types/node-fetch": "^2.6.2"
