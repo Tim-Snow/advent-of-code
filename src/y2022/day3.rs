@@ -1,58 +1,50 @@
-use std::time::Instant;
+use std::collections::HashSet;
 
-use crate::util::{get_day_data, log_result};
+use crate::util::get_day_data;
 
 pub async fn run() {
     let data = get_day_data(3, 2022).await;
 
-    fn calc_counts(str: &str) -> Vec<i32> {
-        let length = str.lines().next().unwrap().len();
-        let mut counts = vec![0; length];
-
-        str.lines().for_each(|line| {
-            line.chars().enumerate().for_each(|(i, c)| match c {
-                '0' => counts[i] -= 1,
-                '1' => counts[i] += 1,
-                _ => unreachable!(),
-            })
-        });
-
-        counts
-    }
-
-    fn calc_bit(count: i32, if_char: char, else_char: char) -> char {
-        if count.gt(&0) {
-            if_char
-        } else {
-            else_char
+    fn char_priority(c: char) -> u8 {
+        if c.is_uppercase() {
+            return (c as u8) - 38u8;
         }
+        (c as u8) - 96u8
     }
 
-    fn part_one(d: &str) -> String {
-        let counts = calc_counts(d);
+    fn part_one(d: &str) -> u16 {
+        d.lines()
+            .map(|rucksack| -> u8 {
+                let len = rucksack.len();
+                let first_compartment = &rucksack[0..len / 2];
+                let second_compartment = &rucksack[len / 2..];
 
-        let gamma_binary = &counts
-            .iter()
-            .map(|&count| calc_bit(count, '1', '0'))
-            .collect::<String>();
-
-        let gamma_rate = usize::from_str_radix(gamma_binary, 2).unwrap();
-
-        let epsilon_rate = usize::from_str_radix(
-            &gamma_binary
-                .chars()
-                .map(|char| calc_bit(char.to_digit(2).unwrap() as i32, '0', '1'))
-                .collect::<String>(),
-            2,
-        )
-        .unwrap();
-
-        (gamma_rate * epsilon_rate).to_string()
+                first_compartment
+                    .chars()
+                    .filter(|&c| second_compartment.contains(c))
+                    .collect::<HashSet<char>>()
+                    .into_iter()
+                    .map(char_priority)
+                    .fold(u8::MIN, |acc, cur| acc + cur)
+            })
+            .fold(u16::MIN, |acc, cur| acc + (cur as u16))
     }
 
-    fn part_two(_d: &str) -> String {
-        String::from("todo!()")
+    fn part_two(d: &str) -> u16 {
+        d.lines()
+            .collect::<Vec<&str>>()
+            .chunks(3)
+            .map(|chunk| -> u8 {
+                let (first, second, third) = (chunk[0], chunk[1], chunk[2]);
+                first
+                    .chars()
+                    .filter(|&c| second.contains(c) && third.contains(c))
+                    .collect::<HashSet<char>>()
+                    .into_iter()
+                    .fold(u8::MIN, |acc, cur| acc + char_priority(cur))
+            })
+            .fold(u16::MIN, |acc, cur| acc + (cur as u16))
     }
 
-    log_result(3, 2022, &part_one(&data), &part_two(&data), Instant::now());
+    println!("1: {}\n2: {}", part_one(&data), part_two(&data))
 }

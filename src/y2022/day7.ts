@@ -1,7 +1,5 @@
-// @ts-ignore
 import assert from "assert";
-// @ts-ignore
-import fs from "fs";
+import { getDayData, getDayTestData } from "../util";
 
 const OS: "windows" | "mac" = "windows";
 const newline = {
@@ -9,9 +7,9 @@ const newline = {
   mac: "\n",
 };
 
-function day() {
-  const testData = fs.readFileSync("res/7.test.txt").toString();
-  const data = fs.readFileSync("res/7.txt").toString();
+export async function day7() {
+  const testData = getDayTestData(7, 2022);
+  const data = await getDayData(7, 2022);
 
   function parse(data: String) {
     const commands = data
@@ -126,5 +124,3 @@ function day() {
   setTimeout(partOne);
   setTimeout(partTwo);
 }
-
-day();

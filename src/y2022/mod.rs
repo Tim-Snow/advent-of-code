@@ -1,8 +1,12 @@
 use futures::join;
 
 mod day1;
+mod day10;
+mod day11;
+mod day12;
 mod day2;
 mod day3;
+mod day4;
 mod day5;
 
 pub async fn run() {
@@ -20,9 +24,13 @@ pub async fn run() {
                 1 => day1::run().await,
                 2 => day2::run().await,
                 3 => day3::run().await,
-                4 => panic!("Day {d} not implemented"),
+                4 => day4::run().await,
                 5 => day5::run().await,
-                6..=25 => panic!("Day {d} not implemented"),
+                6..=9 => panic!("Day {d} not implemented"),
+                10 => day10::run().await,
+                11 => day11::run().await,
+                12 => day12::run().await,
+                13..=25 => panic!("Day {d} not implemented"),
                 _ => panic!("Invalid day: {d}"),
             },
             Err(_) => {

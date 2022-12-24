@@ -1,5 +1,6 @@
 import assert from "assert";
 import fs from "fs";
+import { getDayData, getDayTestData } from "../util";
 
 const OS: "windows" | "mac" = "windows";
 const newline = {
@@ -7,9 +8,9 @@ const newline = {
   mac: "\n",
 };
 
-function day8() {
-  const testData = fs.readFileSync("res/8.txt.test").toString();
-  const data = fs.readFileSync("res/8.txt").toString();
+export async function day8() {
+  const testData = getDayTestData(8, 2022);
+  const data = await getDayData(8, 2022);
 
   function parse(d: String): number[][] {
     const lines = d.split(newline[OS]);
@@ -145,5 +146,3 @@ function day8() {
   setTimeout(partOne);
   setTimeout(partTwo);
 }
-
-day8();

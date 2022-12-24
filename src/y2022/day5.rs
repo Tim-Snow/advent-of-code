@@ -1,74 +1,111 @@
-use std::{ops::Sub, time::Instant};
+use std::str::{FromStr, Lines};
 
-use crate::util::{get_day_data, log_result};
+use crate::util::get_day_data;
+
+#[derive(Debug)]
+struct Instruction {
+    move_amount: u8,
+    from: usize,
+    to: usize,
+}
+
+impl FromStr for Instruction {
+    type Err = String;
+
+    fn from_str(s: &str) -> Result<Self, String> {
+        let mut split = s.split_whitespace();
+
+        let move_amount: u8 = split.nth(1).unwrap().parse().unwrap();
+        let from: usize = split.nth(1).unwrap().parse::<usize>().unwrap() - 1;
+        let to: usize = split.nth(1).unwrap().parse::<usize>().unwrap() - 1;
+
+        Ok(Instruction {
+            move_amount,
+            from,
+            to,
+        })
+    }
+}
 
 pub async fn run() {
     let data = get_day_data(5, 2022).await;
+    // let test_data = read_to_string("res/5.txt.test").unwrap();
 
-    fn part_one(d: &str) -> String {
-        let mut split = d.split("\r\n\r\n");
-        let initial = split.next().unwrap();
-        // let instructions = split.next().unwrap();
-
-        let total_stacks: usize = initial
+    fn parse(d: &str) -> (Vec<Vec<char>>, Lines) {
+        let width = d
+            .split("\n\n")
+            .next()
+            .unwrap()
             .lines()
             .last()
             .unwrap()
-            .trim()
-            .chars()
-            .last()
-            .unwrap()
-            .to_digit(10)
-            .unwrap()
-            .try_into()
-            .unwrap();
+            .len();
+        let stacks_height = d.split("\n\n").next().unwrap().lines().count() - 1;
+        let instructions = d.split("\n\n").last().unwrap().lines();
 
         let mut stacks: Vec<Vec<char>> = vec![];
 
-        for _ in 0..total_stacks {
+        for x in (1..width).step_by(4) {
             stacks.push(vec![]);
-        }
-
-        dbg!("{} {}", &stacks, total_stacks - 1);
-
-        let mut cur_stack = 0;
-        let mut prev_x = 1;
-        for x in (1..initial.chars().count()).step_by(4) {
-            for y in 0..total_stacks.sub(1) {
-                let current_stack = stacks
-                    .get_mut(cur_stack)
-                    .expect(&dbg!(format!("{} {} {} {}", cur_stack, x, y, prev_x)));
-
-                if x != prev_x {
-                    prev_x = x;
-                    cur_stack += 1;
-                }
-
-                let line = initial.lines().nth(y).unwrap();
-                let c = line.chars().nth(x);
-
-                if c.is_some() && c.unwrap().is_alphabetic() {
-                    dbg!("{}", c.unwrap());
-                    current_stack.push(match c {
-                        Some(val) => val,
-                        None => panic!("called `Option::unwrap()` on a `None` value"),
-                    });
+            for y in 0..stacks_height {
+                let c = d.lines().nth(y).unwrap().chars().nth(x);
+                if let Some(c) = c {
+                    if c != ' ' {
+                        stacks.last_mut().unwrap().insert(0, c);
+                    }
                 }
             }
         }
 
-        dbg!("{}", stacks);
-
-        initial
-            .lines()
-            .for_each(|line| line.chars().for_each(|_char| {}));
-
-        String::default()
+        (stacks, instructions)
     }
 
-    fn part_two(_d: &str) -> String {
-        String::default()
+    fn part_one(d: &str) -> String {
+        let (mut stacks, instructions) = parse(d);
+
+        for instruction in instructions {
+            let parsed: Instruction = instruction.parse().unwrap();
+            for _ in 0..parsed.move_amount {
+                let moved = stacks.get_mut(parsed.from).unwrap().pop().unwrap();
+                stacks.get_mut(parsed.to).unwrap().push(moved);
+            }
+        }
+
+        let mut result = String::default();
+
+        stacks.into_iter().for_each(|stack| {
+            result.push(*stack.last().unwrap());
+        });
+
+        result
     }
 
-    log_result(5, 2022, &part_one(&data), &part_two(&data), Instant::now());
+    fn part_two(d: &str) -> String {
+        let (mut stacks, instructions) = parse(d);
+
+        for instruction in instructions {
+            let parsed: Instruction = instruction.parse().unwrap();
+            let mut moving: Vec<char> = vec![];
+
+            for _ in 0..parsed.move_amount {
+                let moved = stacks.get_mut(parsed.from).unwrap().pop().unwrap();
+                moving.insert(0, moved);
+            }
+
+            stacks.get_mut(parsed.to).unwrap().append(&mut moving);
+        }
+
+        let mut result = String::default();
+
+        stacks.into_iter().for_each(|stack| {
+            result.push(*stack.last().unwrap());
+        });
+
+        result
+    }
+
+    // assert_eq!(part_one(&test_data), "CMZ");
+    // assert_eq!(part_two(&test_data), "MCD");
+
+    println!("1: {}\n2: {}", part_one(&data), part_two(&data));
 }

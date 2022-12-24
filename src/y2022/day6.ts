@@ -1,18 +1,18 @@
-// @ts-ignore
 import assert from "assert";
-// @ts-ignore
-import fs from "fs";
+import { getDayData, getDayTestData } from "../util";
 
-const testData = fs.readFileSync("res/6.test.txt").toString();
-const data = fs.readFileSync("res/6.txt").toString();
+export async function day6() {
+  const testData = getDayTestData(6, 2022);
+  const data = await getDayData(6, 2022);
 
-function day6() {
   assert(existAndUnique("this", 420, ["", "n", "a"]) === false);
   assert(existAndUnique("does", 69, ["n", "a", "N", "A"]) === true);
   assert(existAndUnique("nout", 0, ["B", "A", "T", "M", "A", "N"]) === false);
 
-  const partOne = () => part({ part: 1, size: 4, expectedTestResult: 7 });
-  const partTwo = () => part({ part: 2, size: 14, expectedTestResult: 19 });
+  const partOne = () =>
+    part({ part: 1, size: 4, expectedTestResult: 7, data, testData });
+  const partTwo = () =>
+    part({ part: 2, size: 14, expectedTestResult: 19, data, testData });
 
   setTimeout(partOne);
   setTimeout(partTwo);
@@ -25,9 +25,11 @@ type Part = {
   part: 1 | 2;
   size: number;
   expectedTestResult: number;
+  data: string;
+  testData: string;
 };
 
-function part({ part, size, expectedTestResult }: Part) {
+function part({ part, size, expectedTestResult, data, testData }: Part) {
   const testResult = firstIndexOfAllUniqueChars({
     size,
     data: testData,
@@ -62,5 +64,3 @@ function firstIndexOfAllUniqueChars({
       ) + size
   );
 }
-
-day6();
