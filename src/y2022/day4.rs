@@ -1,5 +1,3 @@
-use std::fs::read_to_string;
-
 use crate::util::get_day_data;
 
 pub async fn run() {

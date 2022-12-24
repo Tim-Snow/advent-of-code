@@ -4,7 +4,7 @@ use crate::util::get_day_data;
 
 #[derive(Debug)]
 struct Monkey {
-    id: usize,
+    // id: usize,
     items: Vec<u16>,
     operation: String,
     test: String,
@@ -18,23 +18,23 @@ impl FromStr for Monkey {
     fn from_str(lines: &str) -> Result<Self, String> {
         let mut lines = lines.lines();
 
-        let id = lines
+        let _id: usize = lines
             .next()
             .unwrap()
             .split_whitespace()
             .last()
             .unwrap()
-            .replace(":", "")
+            .replace(':', "")
             .parse()
             .unwrap();
 
         let items: Vec<u16> = lines
             .next()
             .unwrap()
-            .split(":")
+            .split(':')
             .last()
             .unwrap()
-            .split(",")
+            .split(',')
             .map(|c| c.trim().parse().unwrap())
             .collect();
 
@@ -50,7 +50,7 @@ impl FromStr for Monkey {
         let test = lines
             .next()
             .unwrap()
-            .split(":")
+            .split(':')
             .last()
             .unwrap()
             .trim()
@@ -75,7 +75,7 @@ impl FromStr for Monkey {
             .unwrap();
 
         Ok(Monkey {
-            id,
+            // id,
             items,
             operation,
             test,
@@ -97,7 +97,7 @@ pub async fn run() {
     fn part_one(d: &str) -> String {
         let mut monkeys = parse(d);
 
-        let move_list = monkeys.iter_mut().map(|monkey| {
+        let _move_list = monkeys.iter_mut().map(|monkey| {
             monkey.items.iter_mut().map(|item| -> (u16, usize) {
                 let mut operation_split = monkey.operation.split_whitespace();
                 let operator = operation_split.next().unwrap();
@@ -112,7 +112,7 @@ pub async fn run() {
                     _ => unreachable!(),
                 };
 
-                *item = *item / 3;
+                *item /= 3;
 
                 let mut test_split = monkey.test.split_whitespace();
 
@@ -123,10 +123,10 @@ pub async fn run() {
                 if *item % test_value == 0 {
                     //monkeys.iter().find(|other_monkey| other_monkey.id == monkey.if_true_monkey).unwrap();
                     println!("divisible {} {}", &item, &test_value);
-                    return (*item, monkey.if_true_monkey);
+                    (*item, monkey.if_true_monkey)
                 } else {
                     println!("not divisible {} {}", &item, &test_value);
-                    return (*item, monkey.if_false_monkey);
+                    (*item, monkey.if_false_monkey)
                 }
             })
         });

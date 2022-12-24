@@ -20,7 +20,7 @@ pub async fn run() {
     }
 
     fn parse(d: &str) -> (Position, Position) {
-        let matrix = d.lines().map(|line| line.chars());
+        let _matrix = d.lines().map(|line| line.chars());
 
         let start_position = get_coords_for_char(d, STARTING_POSITION).unwrap();
         let end_position = get_coords_for_char(d, END_POSITION).unwrap();
