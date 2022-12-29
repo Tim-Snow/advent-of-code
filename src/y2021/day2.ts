@@ -1,31 +1,31 @@
-import { getDayData } from "../util";
+import { getDayData } from '../util';
 
 export async function day2() {
-  const data = (await getDayData(2, 2021)).split("\n");
+  const data = (await getDayData(2, 2021)).split('\n');
 
   function calculateDepth(d: string[]) {
-    let horiz_pos = 0;
+    let horizPos = 0;
     let depth = 0;
     let aim = 0;
 
     d.forEach((instruction: string) => {
-      const [direction, amount] = instruction.split(" ");
+      const [direction, amount] = instruction.split(' ');
 
       switch (direction) {
-        case "forward":
-          horiz_pos += parseInt(amount);
+        case 'forward':
+          horizPos += parseInt(amount);
           depth += aim * parseInt(amount);
           break;
-        case "up":
+        case 'up':
           aim -= parseInt(amount);
           break;
-        case "down":
+        case 'down':
           aim += parseInt(amount);
           break;
       }
     });
 
-    return horiz_pos * depth;
+    return horizPos * depth;
   }
 
   const res = { 2: calculateDepth(data) };

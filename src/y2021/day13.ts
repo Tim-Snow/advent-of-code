@@ -1,4 +1,4 @@
-import { getDayData, splitStringOnNewLine, stringToInt } from "../util";
+import { getDayData, splitStringOnNewLine, stringToInt } from '../util';
 
 export async function day13() {
   let x0 = 0;
@@ -8,8 +8,8 @@ export async function day13() {
 
   async function loadData() {
     const data = await getDayData(13, 2021);
-    splitStringOnNewLine(data).forEach((line) => {
-      const [x, y] = line.split(",").map(stringToInt);
+    splitStringOnNewLine(data).forEach(line => {
+      const [x, y] = line.split(',').map(stringToInt);
       if (x > x0) x0 = x;
       else if (x < x1) x1 = x;
 

@@ -1,0 +1,10 @@
+{
+  "singleQuote": true,
+  "semi": true,
+  "arrowParens": "avoid",
+  "bracketSameLine": true,
+  "endOfLine": "lf",
+  "trailingComma": "all",
+  "bracketSpacing": true,
+  "parser": "typescript"
+}

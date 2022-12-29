@@ -1,13 +1,13 @@
-import assert from "assert";
-import { getDayData, getDayTestData } from "../util";
+import assert from 'assert';
+import { getDayData, getDayTestData } from '../util';
 
 export async function day6() {
   const testData = getDayTestData(6, 2022);
   const data = await getDayData(6, 2022);
 
-  assert(existAndUnique("this", 420, ["", "n", "a"]) === false);
-  assert(existAndUnique("does", 69, ["n", "a", "N", "A"]) === true);
-  assert(existAndUnique("nout", 0, ["B", "A", "T", "M", "A", "N"]) === false);
+  assert(!existAndUnique('this', 420, ['', 'n', 'a']));
+  assert(existAndUnique('does', 69, ['n', 'a', 'N', 'A']));
+  assert(!existAndUnique('nout', 0, ['B', 'A', 'T', 'M', 'A', 'N']));
 
   const partOne = () =>
     part({ part: 1, size: 4, expectedTestResult: 7, data, testData });
@@ -19,15 +19,15 @@ export async function day6() {
 }
 
 const existAndUnique = (_value: string, _index: number, array: string[]) =>
-  array.every((value) => !!value) && array.length === new Set(array).size;
+  array.every(value => !(value === '')) && array.length === new Set(array).size;
 
-type Part = {
+interface Part {
   part: 1 | 2;
   size: number;
   expectedTestResult: number;
   data: string;
   testData: string;
-};
+}
 
 function part({ part, size, expectedTestResult, data, testData }: Part) {
   const testResult = firstIndexOfAllUniqueChars({
@@ -37,7 +37,7 @@ function part({ part, size, expectedTestResult, data, testData }: Part) {
 
   assert(
     testResult === expectedTestResult,
-    `Expected ${expectedTestResult}, was ${testResult}`
+    `Expected ${expectedTestResult}, was ${testResult}`,
   );
 
   const tag = `Part ${part}`;
@@ -58,9 +58,9 @@ function firstIndexOfAllUniqueChars({
 
   return (
     data
-      .split("")
+      .split('')
       .findIndex((_, i) =>
-        window.map((_, j) => data.charAt(i + j)).every(existAndUnique)
+        window.map((_, j) => data.charAt(i + j)).every(existAndUnique),
       ) + size
   );
 }

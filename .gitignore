@@ -105,8 +105,9 @@ dist
 
 # Rust
 
-/target
+target
 
 # AoC data
 
 res/**/*.txt
+!res/**/*.test.txt

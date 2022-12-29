@@ -1,9 +1,9 @@
-import { getDayData, stringToInt } from "../util";
+import { getDayData, stringToInt } from '../util';
 
 export async function day9() {
   const data = (await getDayData(9, 2021))
-    .split("\n")
-    .map((line) => line.split("").map(stringToInt));
+    .split('\n')
+    .map(line => line.split('').map(stringToInt));
 
   const xMin = 0;
   const yMin = 0;
@@ -26,16 +26,14 @@ export async function day9() {
     ];
 
     return res
-      .filter((val) => !!val && val >= 0)
-      .every(
-        (surroundingValue) => !!surroundingValue && surroundingValue > depth
-      )
+      .filter(val => !!val && val >= 0)
+      .every(surroundingValue => !!surroundingValue && surroundingValue > depth)
       ? depth
       : undefined;
   }
 
   const r = data.map(
-    (line, y) => line.map((depth, x) => depthIfLowest(depth, x, y))
+    (line, y) => line.map((depth, x) => depthIfLowest(depth, x, y)),
     // .reduce((p, c) => (parseInt(c, 10) >= 0 ? p + (c + 1) : p), null)
   );
 

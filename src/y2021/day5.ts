@@ -1,9 +1,9 @@
-import { getDayData, stringToInt } from "../util";
+import { getDayData, stringToInt } from '../util';
 
-type Entry = {
+interface Entry {
   from: { x: string; y: string };
   to: { x: string; y: string };
-};
+}
 
 export async function day5() {
   async function loadData() {
@@ -17,9 +17,9 @@ export async function day5() {
     const entries: Entry[] = [];
 
     data
-      .split("\n")
-      .map((line) => line.split(" -> "))
-      .map(([from, to]) => [from.split(","), to.split(",")])
+      .split('\n')
+      .map(line => line.split(' -> '))
+      .map(([from, to]) => [from.split(','), to.split(',')])
       .forEach(([from, to]) => {
         const f0 = stringToInt(from[0]);
         const f1 = stringToInt(from[1]);
@@ -50,7 +50,7 @@ export async function day5() {
   }
 
   const createEmptyGrid = (x: number, y: number) =>
-    [...Array(y).keys()].map((y) => [...Array(x).keys()].map((x) => 0));
+    [...Array(y).keys()].map(y => [...Array(x).keys()].map(x => 0));
 
   // const vectorsHoriz = (v1: Entry, v2: Entry) => v1.y === v2.y;
   // const vectorsVert = (v1, v2) => v1.x === v2.x;
@@ -59,7 +59,7 @@ export async function day5() {
 
   function pt1() {
     const lines = entries
-      .map((entry) => {
+      .map(entry => {
         if (entry.from.x === entry.to.x || entry.from.y === entry.to.y) {
           const x1 = parseInt(entry.from.x);
           const y1 = parseInt(entry.from.y);
@@ -67,8 +67,8 @@ export async function day5() {
           const y2 = parseInt(entry.to.y);
 
           if (y1 === y2) {
-            return [...Array(grid.y).keys()].map((y) =>
-              [...Array(grid.x).keys()].map((x) =>
+            return [...Array(grid.y).keys()].map(y =>
+              [...Array(grid.x).keys()].map(x =>
                 y === y1 // || y2 redundant
                   ? x1 < x2
                     ? x >= x1 && x <= x2
@@ -77,14 +77,14 @@ export async function day5() {
                     : x >= x2 && x <= x1
                     ? 1
                     : 0
-                  : 0
-              )
+                  : 0,
+              ),
             );
           }
 
           if (x1 === x2) {
-            return [...Array(grid.y).keys()].map((y) =>
-              [...Array(grid.x).keys()].map((x) =>
+            return [...Array(grid.y).keys()].map(y =>
+              [...Array(grid.x).keys()].map(x =>
                 x === x1 // || x2 redundant
                   ? y1 < y2
                     ? y >= y1 && y <= y2
@@ -93,21 +93,21 @@ export async function day5() {
                     : y >= y2 && y <= y1
                     ? 1
                     : 0
-                  : 0
-              )
+                  : 0,
+              ),
             );
           }
 
           return undefined;
         }
       })
-      .filter((val) => !!val)
+      .filter(val => !(val == null))
       .map((lineGrid, lineIter) =>
         lineGrid?.map((lineGridRow, lineGridIter) => ({
           lineIter,
           lineGridIter,
           lineGridRow,
-        }))
+        })),
       );
 
     // console.log({ lines });
@@ -115,9 +115,9 @@ export async function day5() {
 
     // const lineCountGrid = createEmptyGrid(grid.x, grid.y);
 
-    const reduced = lines.map((g) => {
+    const reduced = lines.map(g => {
       // console.log({ line });
-      g?.map((gridRow) => gridRow.lineGridRow);
+      g?.map(gridRow => gridRow.lineGridRow);
       // line.lineGridRow.map((col, i) => console.log(col[i]));
     });
 
@@ -129,7 +129,7 @@ export async function day5() {
       .fill([])
       .map(
         (r, y) =>
-          (r = [...Array(grid.y).keys()].map((x) => ({ x, y, value: 0 })))
+          (r = [...Array(grid.y).keys()].map(x => ({ x, y, value: 0 }))),
       );
   }
 

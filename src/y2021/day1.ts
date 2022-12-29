@@ -1,7 +1,7 @@
-import { getDayData, stringToInt } from "../util";
+import { getDayData, stringToInt } from '../util';
 
 export async function day1() {
-  const data = (await getDayData(1, 2021)).split("\n").map(stringToInt);
+  const data = (await getDayData(1, 2021)).split('\n').map(stringToInt);
 
   function pt1() {
     let last = data[0];

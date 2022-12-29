@@ -1,9 +1,9 @@
-import { add, getDayData, stringToInt } from "../util";
+import { add, getDayData, stringToInt } from '../util';
 
 export async function day6() {
   async function loadData() {
     return (await getDayData(6, 2021))
-      .split(",")
+      .split(',')
       .map(stringToInt)
       .reduce(
         (p, c) => {
@@ -12,7 +12,7 @@ export async function day6() {
           const after = p.slice(c + 1);
           return [...before, cur + 1, ...after];
         },
-        [0, 0, 0, 0, 0, 0, 0, 0, 0]
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
       );
   }
 

@@ -1,11 +1,10 @@
-import assert from "assert";
-import fs from "fs";
-import { getDayData, getDayTestData } from "../util";
+import assert from 'assert';
+import { getDayData, getDayTestData } from '../util';
 
-const OS: "windows" | "mac" = "windows";
+const OS: 'windows' | 'mac' = 'windows';
 const newline = {
-  windows: "\r\n",
-  mac: "\n",
+  windows: '\r\n',
+  mac: '\n',
 };
 
 export async function day8() {
@@ -14,12 +13,8 @@ export async function day8() {
 
   function parse(d: String): number[][] {
     const lines = d.split(newline[OS]);
-    const height = lines.length;
-    const width = lines[0].length;
 
-    const perimeter = height * 2 + width * 2 - 4;
-
-    return lines.map((line) => line.split("").map((v) => parseInt(v, 10)));
+    return lines.map(line => line.split('').map(v => parseInt(v, 10)));
   }
 
   function perimeter(arr: number[][]): number {
@@ -43,25 +38,25 @@ export async function day8() {
         let isVisible = false;
 
         const left = row.slice(0, x);
-        isVisible = left.every((tree) => tree < currentHeight);
+        isVisible = left.every(tree => tree < currentHeight);
 
         if (!isVisible) {
           const right = row.slice(x + 1);
-          isVisible = right.every((tree) => tree < currentHeight);
+          isVisible = right.every(tree => tree < currentHeight);
         }
 
         if (!isVisible) {
           const above = Array(y)
             .fill(undefined)
             .map((_, row) => arr[row][x]);
-          isVisible = above.every((tree) => tree < currentHeight);
+          isVisible = above.every(tree => tree < currentHeight);
         }
 
         if (!isVisible) {
           const below = Array(innerHeight - y)
             .fill(undefined)
             .map((_, row) => arr[row + y + 1][x]);
-          isVisible = below.every((tree) => tree < currentHeight);
+          isVisible = below.every(tree => tree < currentHeight);
         }
 
         if (isVisible) visible += 1;
@@ -80,7 +75,7 @@ export async function day8() {
 
     assert(testResult === 21, `Expected 21, got: ${testResult}`);
 
-    console.log("Part 1: ", calculatePartOne(parse(data)));
+    console.log('Part 1: ', calculatePartOne(parse(data)));
   }
 
   function calculatePartTwo(arr: number[][]): number {
@@ -106,13 +101,13 @@ export async function day8() {
           .fill(undefined)
           .map((_, row) => arr[row + y + 1][x]);
 
-        isVisible = left.every((tree) => tree < currentHeight);
-        isVisible = isVisible || right.every((tree) => tree < currentHeight);
-        isVisible = isVisible || above.every((tree) => tree < currentHeight);
-        isVisible = isVisible || below.every((tree) => tree < currentHeight);
+        isVisible = left.every(tree => tree < currentHeight);
+        isVisible = isVisible || right.every(tree => tree < currentHeight);
+        isVisible = isVisible || above.every(tree => tree < currentHeight);
+        isVisible = isVisible || below.every(tree => tree < currentHeight);
 
         if (isVisible) {
-          let scores = Array(4).fill(1);
+          const scores = Array(4).fill(1);
 
           [left, right, above, below].forEach((direction, i) => {
             let blocked = false;
@@ -125,7 +120,7 @@ export async function day8() {
 
           topScoring = Math.max(
             topScoring,
-            scores.reduce((p, c) => p * c, 1)
+            scores.reduce((p, c) => p * c, 1),
           );
         }
       }
@@ -139,10 +134,10 @@ export async function day8() {
 
     assert(testResult === 8, `Expected 8, got: ${testResult}`);
 
-    console.log("Part 2: ", calculatePartTwo(parse(data)));
+    console.log('Part 2: ', calculatePartTwo(parse(data)));
   }
 
-  console.log("Day 8\n");
+  console.log('Day 8\n');
   setTimeout(partOne);
   setTimeout(partTwo);
 }
