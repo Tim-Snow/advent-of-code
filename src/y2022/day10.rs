@@ -2,9 +2,10 @@ use std::{
     fmt::Display,
     ops::{Add, Mul, Sub},
     str::FromStr,
+    time::Instant,
 };
 
-use crate::util::get_day_data;
+use crate::util::{get_day_data, log_result};
 
 #[derive(Debug)]
 enum Line {
@@ -132,5 +133,5 @@ pub async fn run() {
         String::default()
     }
 
-    println!("1: {}\n2: {}", part_one(&data), part_two(&data))
+    log_result(10, 2022, &part_one(&data), &part_two(&data), Instant::now())
 }

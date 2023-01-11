@@ -1,6 +1,9 @@
-use std::str::{FromStr, Lines};
+use std::{
+    str::{FromStr, Lines},
+    time::Instant,
+};
 
-use crate::util::get_day_data;
+use crate::util::{get_day_data, log_result};
 
 #[derive(Debug)]
 struct Instruction {
@@ -107,5 +110,5 @@ pub async fn run() {
     // assert_eq!(part_one(&test_data), "CMZ");
     // assert_eq!(part_two(&test_data), "MCD");
 
-    println!("1: {}\n2: {}", part_one(&data), part_two(&data));
+    log_result(5, 2022, &part_one(&data), &part_two(&data), Instant::now())
 }

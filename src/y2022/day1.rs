@@ -7,6 +7,7 @@ pub async fn run() {
 
     let part_one = data
         .lines()
+        .filter(|line| !line.is_empty())
         .map(|line| line.parse::<u32>().unwrap())
         .fold((u32::MIN, u32::MAX), |(accum, prev), num| {
             match num.gt(&prev) {
@@ -19,6 +20,7 @@ pub async fn run() {
 
     let part_two = data
         .lines()
+        .filter(|line| !line.is_empty())
         .map(|line| line.parse::<u32>().unwrap())
         .fold(
             (u32::MIN, (None, None, None)),

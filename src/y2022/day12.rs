@@ -1,4 +1,6 @@
-use crate::util::get_day_data;
+use std::time::Instant;
+
+use crate::util::{get_day_data, log_result};
 
 static STARTING_POSITION: char = 'S';
 static END_POSITION: char = 'E';
@@ -41,5 +43,5 @@ pub async fn run() {
         String::default()
     }
 
-    println!("1: {}\n2: {}", part_one(&data), part_two(&data))
+    log_result(12, 2022, &part_one(&data), &part_two(&data), Instant::now())
 }

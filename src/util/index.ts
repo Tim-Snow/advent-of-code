@@ -2,6 +2,10 @@ import * as fs from 'fs';
 import path from 'path';
 import fetch from 'node-fetch';
 
+const { platform } = process;
+
+export const newline = platform === 'win32' ? '\r\n' : '\n';
+
 export function getDayTestData(day: number, year: number): string {
   return fs.readFileSync(
     path.resolve('res', `${year}`, `${day}.test.txt`),

@@ -1,4 +1,6 @@
-use crate::util::get_day_data;
+use std::time::Instant;
+
+use crate::util::{get_day_data, log_result};
 
 pub async fn run() {
     let data = get_day_data(4, 2022).await;
@@ -55,5 +57,11 @@ pub async fn run() {
             .fold(u16::MIN, |acc, cur| acc + (cur as u16))
     }
 
-    println!("1: {}\n2: {}", part_one(&data), part_two(&data))
+    log_result(
+        4,
+        2022,
+        &part_one(&data).to_string(),
+        &part_two(&data).to_string(),
+        Instant::now(),
+    )
 }
