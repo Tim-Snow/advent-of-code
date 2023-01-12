@@ -10,12 +10,13 @@ pub async fn run() {
     let day = dotenv::var("DAY");
 
     async fn run_all() {
+        println!("Running all");
         join![day1::run(), day2::run(), day3::run()];
     }
 
     match day {
         Err(_) => {
-            println!("Day not provided, running all");
+            println!("Day not provided");
             run_all().await;
         }
         Ok(day) => match day.parse::<u8>() {
@@ -27,7 +28,7 @@ pub async fn run() {
                 _ => panic!("Invalid day: {day}"),
             },
             Err(_) => {
-                println!("Could not parse day: '{day}' to int, running all");
+                println!("Could not parse day: '{day}' to int");
                 run_all().await;
             }
         },
