@@ -34,6 +34,10 @@ pub async fn get_day_data(day: u8, year: u16) -> String {
     }
 }
 
+pub fn get_day_test_data(day: u8, year: u16) -> String {
+    read_to_string(format!("res/{year}/{day}.test.txt")).expect("Test data has not been created")
+}
+
 fn get_client() -> Client {
     let session = format!("session={}", dotenv::var("COOKIE").unwrap());
 

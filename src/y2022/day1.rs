@@ -1,48 +1,34 @@
-use std::time::Instant;
+use std::{ops::AddAssign, time::Instant};
 
-use crate::util::{get_day_data, log_result};
+use crate::util::{get_day_data, get_day_test_data, log_result};
 
 pub async fn run() {
     let data = get_day_data(1, 2022).await;
+    let test_data = get_day_test_data(1, 2022);
 
-    let part_one = data
-        .lines()
-        .filter(|line| !line.is_empty())
-        .map(|line| line.parse::<u32>().unwrap())
-        .fold((u32::MIN, u32::MAX), |(accum, prev), num| {
-            match num.gt(&prev) {
-                true => (accum + 1, num),
-                false => (accum, num),
-            }
-        })
-        .0
-        .to_string();
+    fn part_one(d: &str) -> String {
+        let mut highest = u32::MIN;
+        let mut current = u32::MIN;
 
-    let part_two = data
-        .lines()
-        .filter(|line| !line.is_empty())
-        .map(|line| line.parse::<u32>().unwrap())
-        .fold(
-            (u32::MIN, (None, None, None)),
-            |(accum, previous), current| match previous {
-                (None, None, None) => (0, (None, None, Some(current))),
-                (None, None, Some(k)) => (0, (None, Some(k), Some(current))),
-                (None, Some(j), Some(k)) => (0, (Some(j), Some(k), Some(current))),
-                (Some(i), Some(j), Some(k)) => {
-                    let prev_sum = i + j + k;
-                    let current_sum = j + k + current;
-                    let next = (Some(j), Some(k), Some(current));
-
-                    match current_sum.gt(&prev_sum) {
-                        true => (accum + 1, next),
-                        false => (accum, next),
-                    }
+        d.lines().for_each(|line| match line.parse::<u32>() {
+            Err(_) => {
+                if current.gt(&highest) {
+                    highest = current;
                 }
-                _ => unreachable!(),
-            },
-        )
-        .0
-        .to_string();
+                current = 0;
+            }
+            Ok(num) => current.add_assign(num),
+        });
 
-    log_result(1, 2022, &part_one, &part_two, Instant::now())
+        highest.to_string()
+    }
+
+    fn part_two(d: &str) -> String {
+        String::new()
+    }
+
+    assert_eq!(part_one(&test_data), "24000");
+    assert_eq!(part_two(&test_data), "45000");
+
+    log_result(1, 2022, &part_one(&data), &part_two(&data), Instant::now())
 }

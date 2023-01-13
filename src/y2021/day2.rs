@@ -24,7 +24,7 @@ impl Instruction {
 }
 
 pub async fn run() {
-    let data = get_day_data(2, 2022).await;
+    let data = get_day_data(2, 2021).await;
 
     fn part_one(d: &str) -> String {
         let mut horizontal_position: u16 = 0;
@@ -58,5 +58,5 @@ pub async fn run() {
         u32::from(horizontal_position).mul(depth).to_string()
     }
 
-    log_result(2, 2022, &part_one(&data), &part_two(&data), Instant::now());
+    log_result(2, 2021, &part_one(&data), &part_two(&data), Instant::now());
 }

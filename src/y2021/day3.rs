@@ -3,7 +3,7 @@ use std::time::Instant;
 use crate::util::{get_day_data, log_result};
 
 pub async fn run() {
-    let data = get_day_data(3, 2022).await;
+    let data = get_day_data(3, 2021).await;
 
     fn calc_counts(str: &str) -> Vec<i32> {
         let length = str.lines().next().unwrap().len();
@@ -54,5 +54,5 @@ pub async fn run() {
         String::from("todo!()")
     }
 
-    log_result(3, 2022, &part_one(&data), &part_two(&data), Instant::now());
+    log_result(3, 2021, &part_one(&data), &part_two(&data), Instant::now());
 }
