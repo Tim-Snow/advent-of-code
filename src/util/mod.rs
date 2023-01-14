@@ -5,6 +5,11 @@ use std::fs::{read_to_string, File};
 use std::io::Write;
 use std::time::Instant;
 
+#[cfg(windows)]
+pub static LINE_ENDING: &str = "\r\n";
+#[cfg(not(windows))]
+pub static LINE_ENDING: &str = "\n";
+
 pub async fn get_day_data(day: u8, year: u16) -> String {
     let path = format!("res/{year}/{day}.txt");
     let file = File::open(&path);
