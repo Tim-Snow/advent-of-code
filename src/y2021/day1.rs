@@ -3,7 +3,7 @@ use std::time::Instant;
 use crate::util::{get_day_data, get_day_test_data, log_result};
 
 pub async fn run() {
-    let data = get_day_data(1, 2022).await;
+    let data = get_day_data(1, 2021).await;
     let test_data = get_day_test_data(1, 2021);
 
     fn part_one(d: &str) -> String {
@@ -50,5 +50,5 @@ pub async fn run() {
     assert_eq!(part_one(&test_data), "7");
     assert_eq!(part_two(&test_data), "5");
 
-    log_result(1, 2022, &part_one(&data), &part_two(&data), Instant::now())
+    log_result(1, 2021, &part_one(&data), &part_two(&data), Instant::now())
 }
