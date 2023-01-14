@@ -3,8 +3,12 @@ use std::time::Instant;
 use crate::util::{get_day_data, get_day_test_data, log_result, LINE_ENDING};
 
 pub async fn run() {
-    let data = get_day_data(1, 2022).await;
-    let test_data = get_day_test_data(1, 2022);
+    let data = parse(&get_day_data(1, 2022).await);
+    let test_data = parse(&get_day_test_data(1, 2022));
+
+    fn parse(d: &str) -> Vec<u32> {
+        sum_calories(d).into_iter().rev().collect()
+    }
 
     fn sum_calories(d: &str) -> Vec<u32> {
         let mut values: Vec<u32> = d
@@ -22,17 +26,12 @@ pub async fn run() {
         values
     }
 
-    fn part_one(d: &str) -> String {
-        sum_calories(d).iter().rev().next().unwrap().to_string()
+    fn part_one(d: &[u32]) -> String {
+        d.first().unwrap().to_string()
     }
 
-    fn part_two(d: &str) -> String {
-        sum_calories(d)
-            .iter()
-            .rev()
-            .take(3)
-            .sum::<u32>()
-            .to_string()
+    fn part_two(d: &[u32]) -> String {
+        d.iter().take(3).sum::<u32>().to_string()
     }
 
     assert_eq!(part_one(&test_data), "24000");
@@ -43,8 +42,8 @@ pub async fn run() {
     let part_one = part_one(&data);
     let part_two = part_two(&data);
 
+    log_result(1, 2022, &part_one, &part_two, started);
+
     assert_eq!(part_one, "70374");
     assert_eq!(part_two, "204610");
-
-    log_result(1, 2022, &part_one, &part_two, started);
 }
