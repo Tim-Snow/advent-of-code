@@ -32,7 +32,12 @@ pub async fn get_day_data(day: u8, year: u16) -> String {
             let mut output = File::create(&path).unwrap();
 
             println!("Writing fetched data to: {}", &path);
-            write!(output, "{}", content).unwrap();
+            write!(
+                output,
+                "{}",
+                content.replace('\r', "").replace('\n', LINE_ENDING)
+            )
+            .unwrap();
 
             content
         }

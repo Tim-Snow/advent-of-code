@@ -22,7 +22,7 @@ async fn main() {
         }
         Ok(year) => match year.parse::<u16>() {
             Ok(year) => match year {
-                2015..=2020 => panic!("Year {year} not implemented"),
+                2015..=2020 => unimplemented!("Year {year} not implemented"),
                 2021 => y2021::run().await,
                 2022 => y2022::run().await,
                 _ => panic!("Invalid year: {year}"),

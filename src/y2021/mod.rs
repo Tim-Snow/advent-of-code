@@ -24,7 +24,7 @@ pub async fn run() {
                 1 => day1::run().await,
                 2 => day2::run().await,
                 3 => day3::run().await,
-                4..=25 => panic!("Day {day} not implemented"),
+                4..=25 => unimplemented!("Day {day} not implemented"),
                 _ => panic!("Invalid day: {day}"),
             },
             Err(_) => {

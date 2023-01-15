@@ -31,7 +31,7 @@ pub async fn run() {
     }
 
     fn not_implemented(day: u8) {
-        panic!("Day {day} not implemented");
+        unimplemented!("Day {day} not implemented");
     }
 
     match day {

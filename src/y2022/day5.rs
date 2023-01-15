@@ -3,7 +3,7 @@ use std::{
     time::Instant,
 };
 
-use crate::util::{get_day_data, log_result};
+use crate::util::{check_results, get_day_data, get_day_test_data, log_result, LINE_ENDING};
 
 #[derive(Debug)]
 struct Instruction {
@@ -32,20 +32,29 @@ impl FromStr for Instruction {
 
 pub async fn run() {
     let data = get_day_data(5, 2022).await;
-    // let test_data = read_to_string("res/5.txt.test").unwrap();
+    let test_data = get_day_test_data(5, 2022);
 
     fn parse(d: &str) -> (Vec<Vec<char>>, Lines) {
         let width = d
-            .split("\n\n")
+            .split(&format!("{LINE_ENDING}{LINE_ENDING}"))
             .next()
             .unwrap()
             .lines()
             .last()
             .unwrap()
             .len();
-        let stacks_height = d.split("\n\n").next().unwrap().lines().count() - 1;
-        let instructions = d.split("\n\n").last().unwrap().lines();
-
+        let stacks_height = d
+            .split(&format!("{LINE_ENDING}{LINE_ENDING}"))
+            .next()
+            .unwrap()
+            .lines()
+            .count()
+            - 1;
+        let instructions = d
+            .split(&format!("{LINE_ENDING}{LINE_ENDING}"))
+            .last()
+            .unwrap()
+            .lines();
         let mut stacks: Vec<Vec<char>> = vec![];
 
         for x in (1..width).step_by(4) {
@@ -77,7 +86,9 @@ pub async fn run() {
         let mut result = String::default();
 
         stacks.into_iter().for_each(|stack| {
-            result.push(*stack.last().unwrap());
+            if let Some(v) = stack.last() {
+                result.push(*v);
+            }
         });
 
         result
@@ -101,14 +112,22 @@ pub async fn run() {
         let mut result = String::default();
 
         stacks.into_iter().for_each(|stack| {
-            result.push(*stack.last().unwrap());
+            if let Some(v) = stack.last() {
+                result.push(*v);
+            }
         });
 
         result
     }
 
-    // assert_eq!(part_one(&test_data), "CMZ");
-    // assert_eq!(part_two(&test_data), "MCD");
+    check_results((part_one(&test_data), "CMZ"), (part_two(&test_data), "MCD"));
 
-    log_result(5, 2022, &part_one(&data), &part_two(&data), Instant::now())
+    let started = Instant::now();
+
+    let part_one = part_one(&data);
+    let part_two = part_two(&data);
+
+    log_result(5, 2022, &part_one, &part_two, started);
+
+    check_results((part_one, "QPJPLMNNR"), (part_two, "BQDNWJPVJ"));
 }
