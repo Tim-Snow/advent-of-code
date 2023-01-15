@@ -1,9 +1,10 @@
 use std::{collections::HashSet, time::Instant};
 
-use crate::util::{get_day_data, log_result};
+use crate::util::{check_results, get_day_data, get_day_test_data, log_result};
 
 pub async fn run() {
     let data = get_day_data(3, 2022).await;
+    let test_data = get_day_test_data(3, 2022);
 
     fn char_priority(c: char) -> u8 {
         if c.is_uppercase() {
@@ -46,11 +47,17 @@ pub async fn run() {
             .fold(u16::MIN, |acc, cur| acc + (cur as u16))
     }
 
-    log_result(
-        3,
-        2022,
-        &part_one(&data).to_string(),
-        &part_two(&data).to_string(),
-        Instant::now(),
-    )
+    check_results(
+        (part_one(&test_data).to_string(), "157"),
+        (part_two(&test_data).to_string(), "70"),
+    );
+
+    let started = Instant::now();
+
+    let part_one = part_one(&data).to_string();
+    let part_two = part_two(&data).to_string();
+
+    log_result(3, 2022, &part_one, &part_two, started);
+
+    check_results((part_one, "7903"), (part_two, "2548"));
 }
