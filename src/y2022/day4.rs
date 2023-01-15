@@ -1,6 +1,55 @@
-use std::time::Instant;
+use std::{str::FromStr, time::Instant};
 
 use crate::util::{check_results, get_day_data, get_day_test_data, log_result};
+
+struct FromTo {
+    from: u8,
+    to: u8,
+}
+
+struct Assignments {
+    left: FromTo,
+    right: FromTo,
+}
+
+impl FromStr for Assignments {
+    type Err = String;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        let mut split = s.split(',');
+
+        let mut left = split.next().unwrap().split('-');
+        let left_from: u8 = left.next().unwrap().parse().unwrap();
+        let left_to: u8 = left.next().unwrap().parse().unwrap();
+
+        let mut right = split.next().unwrap().split('-');
+        let right_from: u8 = right.next().unwrap().parse().unwrap();
+        let right_to: u8 = right.next().unwrap().parse().unwrap();
+
+        Ok(Assignments {
+            left: FromTo {
+                from: left_from,
+                to: left_to,
+            },
+            right: FromTo {
+                from: right_from,
+                to: right_to,
+            },
+        })
+    }
+}
+
+impl Assignments {
+    fn fully_contains(&self) -> bool {
+        self.left.from <= self.right.from && self.left.to >= self.right.to
+            || self.left.from >= self.right.from && self.left.to <= self.right.to
+    }
+
+    fn overlaps(&self) -> bool {
+        self.left.from <= self.right.from && self.left.to >= self.right.from
+            || self.right.from <= self.left.from && self.right.to >= self.left.from
+    }
+}
 
 pub async fn run() {
     let data = get_day_data(4, 2022).await;
@@ -8,54 +57,28 @@ pub async fn run() {
 
     fn part_one(d: &str) -> u16 {
         d.lines()
-            .map(|line| -> u8 {
-                let mut split = line.split(',');
+            .map(|line| -> u16 {
+                let assignments: Assignments = line.parse().unwrap();
 
-                let mut one = split.next().unwrap().split('-');
-                let one_from: u8 = one.next().unwrap().parse().unwrap();
-                let one_to: u8 = one.next().unwrap().parse().unwrap();
-
-                let mut two = split.next().unwrap().split('-');
-                let two_from: u8 = two.next().unwrap().parse().unwrap();
-                let two_to: u8 = two.next().unwrap().parse().unwrap();
-
-                match one_from <= two_from && one_to >= two_to
-                    || one_from >= two_from && one_to <= two_to
-                {
+                match assignments.fully_contains() {
                     true => 1,
                     false => 0,
                 }
             })
-            .fold(0, |acc, cur| acc + (cur as u16))
+            .sum()
     }
 
     fn part_two(d: &str) -> u16 {
-        fn range(of: &str) -> Vec<u8> {
-            let mut split = of.split('-');
-            let from: u8 = split.next().unwrap().parse().unwrap();
-            let to: u8 = split.next().unwrap().parse().unwrap();
-
-            let mut ret = Vec::new();
-
-            for val in from..=to {
-                ret.push(val);
-            }
-
-            ret
-        }
-
         d.lines()
-            .map(|line| -> u8 {
-                let mut split = line.split(',');
-                let one = range(split.next().unwrap());
-                let two = range(split.next().unwrap());
+            .map(|line| -> u16 {
+                let assignments: Assignments = line.parse().unwrap();
 
-                match one.iter().any(|value| two.contains(value)) {
+                match assignments.overlaps() {
                     true => 1,
                     false => 0,
                 }
             })
-            .fold(u16::MIN, |acc, cur| acc + (cur as u16))
+            .sum()
     }
 
     check_results(
