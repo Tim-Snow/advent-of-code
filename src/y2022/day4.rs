@@ -1,15 +1,27 @@
 use std::{str::FromStr, time::Instant};
 
-use crate::util::{check_results, get_day_data, get_day_test_data, log_result};
+use crate::util::{check_results, get_day_data, get_day_test_data, log_results};
 
-struct FromTo {
-    from: u8,
-    to: u8,
+struct Window {
+    start: u8,
+    end: u8,
+}
+
+impl FromStr for Window {
+    type Err = String;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        let mut split = s.split('-');
+        let start: u8 = split.next().unwrap().parse().unwrap();
+        let end: u8 = split.next().unwrap().parse().unwrap();
+
+        Ok(Window { start, end })
+    }
 }
 
 struct Assignments {
-    left: FromTo,
-    right: FromTo,
+    a: Window,
+    b: Window,
 }
 
 impl FromStr for Assignments {
@@ -18,36 +30,22 @@ impl FromStr for Assignments {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let mut split = s.split(',');
 
-        let mut left = split.next().unwrap().split('-');
-        let left_from: u8 = left.next().unwrap().parse().unwrap();
-        let left_to: u8 = left.next().unwrap().parse().unwrap();
+        let a: Window = split.next().unwrap().parse().unwrap();
+        let b: Window = split.next().unwrap().parse().unwrap();
 
-        let mut right = split.next().unwrap().split('-');
-        let right_from: u8 = right.next().unwrap().parse().unwrap();
-        let right_to: u8 = right.next().unwrap().parse().unwrap();
-
-        Ok(Assignments {
-            left: FromTo {
-                from: left_from,
-                to: left_to,
-            },
-            right: FromTo {
-                from: right_from,
-                to: right_to,
-            },
-        })
+        Ok(Assignments { a, b })
     }
 }
 
 impl Assignments {
     fn fully_contains(&self) -> bool {
-        self.left.from <= self.right.from && self.left.to >= self.right.to
-            || self.left.from >= self.right.from && self.left.to <= self.right.to
+        self.a.start <= self.b.start && self.a.end >= self.b.end
+            || self.a.start >= self.b.start && self.a.end <= self.b.end
     }
 
     fn overlaps(&self) -> bool {
-        self.left.from <= self.right.from && self.left.to >= self.right.from
-            || self.right.from <= self.left.from && self.right.to >= self.left.from
+        self.a.start <= self.b.start && self.a.end >= self.b.start
+            || self.b.start <= self.a.start && self.b.end >= self.a.start
     }
 }
 
@@ -57,27 +55,13 @@ pub async fn run() {
 
     fn part_one(d: &str) -> u16 {
         d.lines()
-            .map(|line| -> u16 {
-                let assignments: Assignments = line.parse().unwrap();
-
-                match assignments.fully_contains() {
-                    true => 1,
-                    false => 0,
-                }
-            })
+            .map(|line| u16::from(line.parse::<Assignments>().unwrap().fully_contains()))
             .sum()
     }
 
     fn part_two(d: &str) -> u16 {
         d.lines()
-            .map(|line| -> u16 {
-                let assignments: Assignments = line.parse().unwrap();
-
-                match assignments.overlaps() {
-                    true => 1,
-                    false => 0,
-                }
-            })
+            .map(|line| u16::from(line.parse::<Assignments>().unwrap().overlaps()))
             .sum()
     }
 
@@ -91,7 +75,7 @@ pub async fn run() {
     let part_one = part_one(&data).to_string();
     let part_two = part_two(&data).to_string();
 
-    log_result(4, 2022, &part_one, &part_two, started);
+    log_results(4, 2022, &part_one, &part_two, started);
 
     check_results((part_one, "573"), (part_two, "867"));
 }

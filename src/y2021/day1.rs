@@ -1,6 +1,6 @@
 use std::time::Instant;
 
-use crate::util::{get_day_data, get_day_test_data, log_result};
+use crate::util::{get_day_data, get_day_test_data, log_results};
 
 pub async fn run() {
     let data = get_day_data(1, 2021).await;
@@ -50,5 +50,5 @@ pub async fn run() {
     assert_eq!(part_one(&test_data), "7");
     assert_eq!(part_two(&test_data), "5");
 
-    log_result(1, 2021, &part_one(&data), &part_two(&data), Instant::now())
+    log_results(1, 2021, &part_one(&data), &part_two(&data), Instant::now())
 }

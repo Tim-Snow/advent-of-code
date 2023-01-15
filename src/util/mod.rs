@@ -61,7 +61,7 @@ fn get_client() -> Client {
     Client::builder().default_headers(headers).build().unwrap()
 }
 
-pub fn log_result(day: u8, year: u16, pt1: &str, pt2: &str, started_at: Instant) {
+pub fn log_results(day: u8, year: u16, pt1: &str, pt2: &str, started_at: Instant) {
     println!(
         "\n{}\nPart 1: {}\nPart 2: {}\nExecution time: {}",
         format!("{year} - Day {day}").blue().bold().underline(),

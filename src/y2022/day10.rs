@@ -5,7 +5,7 @@ use std::{
     time::Instant,
 };
 
-use crate::util::{get_day_data, log_result};
+use crate::util::{get_day_data, log_results};
 
 #[derive(Debug)]
 enum Line {
@@ -133,5 +133,5 @@ pub async fn run() {
         String::default()
     }
 
-    log_result(10, 2022, &part_one(&data), &part_two(&data), Instant::now())
+    log_results(10, 2022, &part_one(&data), &part_two(&data), Instant::now())
 }

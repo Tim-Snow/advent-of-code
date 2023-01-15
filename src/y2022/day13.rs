@@ -1,6 +1,6 @@
 use std::{fs::read_to_string, str::FromStr, time::Instant};
 
-use crate::util::{get_day_data, log_result};
+use crate::util::{get_day_data, log_results};
 
 #[derive(Debug)]
 enum IntList {
@@ -69,5 +69,5 @@ pub async fn run() {
         ""
     }
 
-    log_result(13, 2022, part_one(&data), "", Instant::now());
+    log_results(13, 2022, part_one(&data), "", Instant::now());
 }

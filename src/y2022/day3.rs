@@ -1,6 +1,6 @@
 use std::{collections::HashSet, time::Instant};
 
-use crate::util::{check_results, get_day_data, get_day_test_data, log_result};
+use crate::util::{check_results, get_day_data, get_day_test_data, log_results};
 
 pub async fn run() {
     let data = get_day_data(3, 2022).await;
@@ -57,7 +57,7 @@ pub async fn run() {
     let part_one = part_one(&data).to_string();
     let part_two = part_two(&data).to_string();
 
-    log_result(3, 2022, &part_one, &part_two, started);
+    log_results(3, 2022, &part_one, &part_two, started);
 
     check_results((part_one, "7903"), (part_two, "2548"));
 }

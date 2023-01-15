@@ -1,6 +1,6 @@
 use std::time::Instant;
 
-use crate::util::{get_day_data, log_result};
+use crate::util::{get_day_data, log_results};
 
 pub async fn run() {
     let data = get_day_data(3, 2021).await;
@@ -54,5 +54,5 @@ pub async fn run() {
         String::from("todo!()")
     }
 
-    log_result(3, 2021, &part_one(&data), &part_two(&data), Instant::now());
+    log_results(3, 2021, &part_one(&data), &part_two(&data), Instant::now());
 }

@@ -1,6 +1,6 @@
 use std::{str::FromStr, time::Instant};
 
-use crate::util::{get_day_data, log_result};
+use crate::util::{get_day_data, log_results};
 
 #[derive(Debug)]
 struct Monkey {
@@ -144,5 +144,5 @@ pub async fn run() {
         String::default()
     }
 
-    log_result(11, 2022, &part_one(&data), &part_two(&data), Instant::now())
+    log_results(11, 2022, &part_one(&data), &part_two(&data), Instant::now())
 }

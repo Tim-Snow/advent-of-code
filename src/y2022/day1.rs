@@ -1,6 +1,6 @@
 use std::time::Instant;
 
-use crate::util::{check_results, get_day_data, get_day_test_data, log_result, LINE_ENDING};
+use crate::util::{check_results, get_day_data, get_day_test_data, log_results, LINE_ENDING};
 
 pub async fn run() {
     let data = parse(&get_day_data(1, 2022).await);
@@ -44,7 +44,7 @@ pub async fn run() {
     let part_one = part_one(&data);
     let part_two = part_two(&data);
 
-    log_result(1, 2022, &part_one, &part_two, started);
+    log_results(1, 2022, &part_one, &part_two, started);
 
     check_results((part_one, "70374"), (part_two, "204610"));
 }

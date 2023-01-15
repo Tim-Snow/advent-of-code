@@ -1,6 +1,6 @@
 use std::{ops::Mul, time::Instant};
 
-use crate::util::{get_day_data, log_result};
+use crate::util::{get_day_data, log_results};
 
 enum Instruction {
     Forward(u16),
@@ -58,5 +58,5 @@ pub async fn run() {
         u32::from(horizontal_position).mul(depth).to_string()
     }
 
-    log_result(2, 2021, &part_one(&data), &part_two(&data), Instant::now());
+    log_results(2, 2021, &part_one(&data), &part_two(&data), Instant::now());
 }
