@@ -1,9 +1,10 @@
 use std::time::Instant;
 
-use crate::util::{get_day_data, log_result};
+use crate::util::{check_results, get_day_data, get_day_test_data, log_result};
 
 pub async fn run() {
     let data = get_day_data(4, 2022).await;
+    let test_data = get_day_test_data(4, 2022);
 
     fn part_one(d: &str) -> u16 {
         d.lines()
@@ -57,11 +58,17 @@ pub async fn run() {
             .fold(u16::MIN, |acc, cur| acc + (cur as u16))
     }
 
-    log_result(
-        4,
-        2022,
-        &part_one(&data).to_string(),
-        &part_two(&data).to_string(),
-        Instant::now(),
-    )
+    check_results(
+        (part_one(&test_data).to_string(), "2"),
+        (part_two(&test_data).to_string(), "4"),
+    );
+
+    let started = Instant::now();
+
+    let part_one = part_one(&data).to_string();
+    let part_two = part_two(&data).to_string();
+
+    log_result(4, 2022, &part_one, &part_two, started);
+
+    check_results((part_one, "573"), (part_two, "867"));
 }
