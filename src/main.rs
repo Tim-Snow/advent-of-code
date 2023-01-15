@@ -10,11 +10,6 @@ async fn main() {
 
     let year = dotenv::var("YEAR");
 
-    async fn run_all() {
-        println!("Running all");
-        join!(y2021::run(), y2022::run());
-    }
-
     match year {
         Err(_) => {
             println!("Year not provided");
@@ -32,5 +27,10 @@ async fn main() {
                 run_all().await;
             }
         },
+    }
+
+    async fn run_all() {
+        println!("Running all");
+        join!(y2021::run(), y2022::run());
     }
 }

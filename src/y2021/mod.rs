@@ -5,14 +5,7 @@ mod day2;
 mod day3;
 
 pub async fn run() {
-    println!("Year 2021");
-
     let day = dotenv::var("DAY");
-
-    async fn run_all() {
-        println!("Running all");
-        join![day1::run(), day2::run(), day3::run()];
-    }
 
     match day {
         Err(_) => {
@@ -32,5 +25,10 @@ pub async fn run() {
                 run_all().await;
             }
         },
+    }
+
+    async fn run_all() {
+        println!("Running all");
+        join![day1::run(), day2::run(), day3::run()];
     }
 }

@@ -11,28 +11,7 @@ mod day4;
 mod day5;
 
 pub async fn run() {
-    println!("Year 2022");
-
     let day = dotenv::var("DAY");
-
-    async fn run_all() {
-        println!("Running all");
-        join![
-            day1::run(),
-            day2::run(),
-            day3::run(),
-            day4::run(),
-            day5::run(),
-            day10::run(),
-            day11::run(),
-            day12::run(),
-            day13::run()
-        ];
-    }
-
-    fn not_implemented(day: u8) {
-        unimplemented!("Day {day} not implemented");
-    }
 
     match day {
         Err(_) => {
@@ -59,5 +38,24 @@ pub async fn run() {
                 run_all().await;
             }
         },
+    }
+
+    async fn run_all() {
+        println!("Running all");
+        join![
+            day1::run(),
+            day2::run(),
+            day3::run(),
+            day4::run(),
+            day5::run(),
+            day10::run(),
+            day11::run(),
+            day12::run(),
+            day13::run()
+        ];
+    }
+
+    fn not_implemented(day: u8) {
+        unimplemented!("Day {day} not implemented");
     }
 }
