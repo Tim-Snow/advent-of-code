@@ -1,6 +1,6 @@
 use std::time::Instant;
 
-use crate::util::{get_day_data, get_day_test_data, log_result, LINE_ENDING};
+use crate::util::{check_results, get_day_data, get_day_test_data, log_result, LINE_ENDING};
 
 pub async fn run() {
     let data = parse(&get_day_data(1, 2022).await);
@@ -34,8 +34,10 @@ pub async fn run() {
         d.iter().take(3).sum::<u32>().to_string()
     }
 
-    assert_eq!(part_one(&test_data), "24000");
-    assert_eq!(part_two(&test_data), "45000");
+    check_results(
+        (part_one(&test_data), "24000"),
+        (part_two(&test_data), "45000"),
+    );
 
     let started = Instant::now();
 
@@ -44,6 +46,5 @@ pub async fn run() {
 
     log_result(1, 2022, &part_one, &part_two, started);
 
-    assert_eq!(part_one, "70374");
-    assert_eq!(part_two, "204610");
+    check_results((part_one, "70374"), (part_two, "204610"));
 }

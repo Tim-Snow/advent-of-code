@@ -1,6 +1,6 @@
 use std::time::Instant;
 
-use crate::util::{get_day_data, log_result};
+use crate::util::{check_results, get_day_data, get_day_test_data, log_result};
 
 enum Move {
     Rock,
@@ -80,6 +80,7 @@ impl Line {
 
 pub async fn run() {
     let data = get_day_data(2, 2022).await;
+    let test_data = get_day_test_data(2, 2022);
 
     fn part_one(d: &str) -> u16 {
         let mut total: u16 = 0;
@@ -122,11 +123,17 @@ pub async fn run() {
         total
     }
 
-    log_result(
-        2,
-        2022,
-        &part_one(&data).to_string(),
-        &part_two(&data).to_string(),
-        Instant::now(),
-    )
+    check_results(
+        (part_one(&test_data).to_string(), "15"),
+        (part_two(&test_data).to_string(), "12"),
+    );
+
+    let started = Instant::now();
+
+    let part_one = part_one(&data).to_string();
+    let part_two = part_two(&data).to_string();
+
+    log_result(2, 2022, &part_one, &part_two, started);
+
+    check_results((part_one, "13221"), (part_two, "13131"));
 }

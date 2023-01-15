@@ -65,3 +65,11 @@ pub fn log_result(day: u8, year: u16, pt1: &str, pt2: &str, started_at: Instant)
         format!("{:?}", started_at.elapsed()).yellow().bold()
     );
 }
+
+pub fn check_results(
+    (result_one, test_one): (std::string::String, &str),
+    (result_two, test_two): (std::string::String, &str),
+) {
+    assert_eq!(result_one, test_one);
+    assert_eq!(result_two, test_two);
+}
