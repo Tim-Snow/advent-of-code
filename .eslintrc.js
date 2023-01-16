@@ -27,16 +27,20 @@ module.exports = {
     semi: [2, 'always'],
     '@typescript-eslint/explicit-function-return-type': 0,
     '@typescript-eslint/space-before-function-paren': 0,
-    '@typescript-eslint/member-delimiter-style': {
-      multiline: {
-        delimiter: 'semi',
-        requireLast: true,
+    '@typescript-eslint/semi': 0,
+    '@typescript-eslint/member-delimiter-style': [
+      2,
+      {
+        multiline: {
+          delimiter: 'semi',
+          requireLast: true,
+        },
+        singleline: {
+          delimiter: 'semi',
+          requireLast: true,
+        },
+        multilineDetection: 'brackets',
       },
-      singleline: {
-        delimiter: 'semi',
-        requireLast: false,
-      },
-      multilineDetection: 'brackets',
-    },
+    ],
   },
 };

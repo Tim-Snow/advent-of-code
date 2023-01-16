@@ -6,5 +6,12 @@
   "endOfLine": "lf",
   "trailingComma": "all",
   "bracketSpacing": true,
-  "parser": "typescript"
+  "overrides": [
+    {
+      "files": ["*.ts"],
+      "options": {
+        "parser": "typescript"
+      }
+    }
+  ]
 }
