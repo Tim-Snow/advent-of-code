@@ -53,16 +53,18 @@ pub async fn run() {
     let data = get_day_data(4, 2022).await;
     let test_data = get_day_test_data(4, 2022);
 
-    fn part_one(d: &str) -> u16 {
+    fn part_one(d: &str) -> String {
         d.lines()
             .map(|line| u16::from(line.parse::<Assignments>().unwrap().fully_contains()))
-            .sum()
+            .sum::<u16>()
+            .to_string()
     }
 
-    fn part_two(d: &str) -> u16 {
+    fn part_two(d: &str) -> String {
         d.lines()
             .map(|line| u16::from(line.parse::<Assignments>().unwrap().overlaps()))
-            .sum()
+            .sum::<u16>()
+            .to_string()
     }
 
     check_results(

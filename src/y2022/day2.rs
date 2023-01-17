@@ -82,7 +82,7 @@ pub async fn run() {
     let data = get_day_data(2, 2022).await;
     let test_data = get_day_test_data(2, 2022);
 
-    fn part_one(d: &str) -> u16 {
+    fn part_one(d: &str) -> String {
         let mut total: u16 = 0;
 
         d.lines().for_each(|line| {
@@ -94,10 +94,10 @@ pub async fn run() {
             total += Outcome::score(&result, &me_move);
         });
 
-        total
+        total.to_string()
     }
 
-    fn part_two(d: &str) -> u16 {
+    fn part_two(d: &str) -> String {
         let mut total: u16 = 0;
 
         d.lines().for_each(|line| {
@@ -120,18 +120,15 @@ pub async fn run() {
             total += Outcome::score(&outcome, &me_move);
         });
 
-        total
+        total.to_string()
     }
 
-    check_results(
-        (part_one(&test_data).to_string(), "15"),
-        (part_two(&test_data).to_string(), "12"),
-    );
+    check_results((part_one(&test_data), "15"), (part_two(&test_data), "12"));
 
     let started = Instant::now();
 
-    let part_one = part_one(&data).to_string();
-    let part_two = part_two(&data).to_string();
+    let part_one = part_one(&data);
+    let part_two = part_two(&data);
 
     log_results(2, 2022, &part_one, &part_two, started);
 

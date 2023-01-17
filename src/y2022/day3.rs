@@ -13,7 +13,7 @@ pub async fn run() {
         (c as u8) - 96u8
     }
 
-    fn part_one(d: &str) -> u16 {
+    fn part_one(d: &str) -> String {
         d.lines()
             .map(|rucksack| -> u8 {
                 let len = rucksack.len();
@@ -29,9 +29,10 @@ pub async fn run() {
                     .fold(u8::MIN, |acc, cur| acc + cur)
             })
             .fold(u16::MIN, |acc, cur| acc + (cur as u16))
+            .to_string()
     }
 
-    fn part_two(d: &str) -> u16 {
+    fn part_two(d: &str) -> String {
         d.lines()
             .collect::<Vec<&str>>()
             .chunks(3)
@@ -45,17 +46,15 @@ pub async fn run() {
                     .fold(u8::MIN, |acc, cur| acc + char_priority(cur))
             })
             .fold(u16::MIN, |acc, cur| acc + (cur as u16))
+            .to_string()
     }
 
-    check_results(
-        (part_one(&test_data).to_string(), "157"),
-        (part_two(&test_data).to_string(), "70"),
-    );
+    check_results((part_one(&test_data), "157"), (part_two(&test_data), "70"));
 
     let started = Instant::now();
 
-    let part_one = part_one(&data).to_string();
-    let part_two = part_two(&data).to_string();
+    let part_one = part_one(&data);
+    let part_two = part_two(&data);
 
     log_results(3, 2022, &part_one, &part_two, started);
 

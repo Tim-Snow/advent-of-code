@@ -1,5 +1,3 @@
-use futures::join;
-
 mod day1;
 mod day10;
 mod day11;
@@ -14,10 +12,6 @@ pub async fn run() {
     let day = dotenv::var("DAY");
 
     match day {
-        Err(_) => {
-            println!("Day not provided");
-            run_all().await;
-        }
         Ok(day) => match day.parse::<u8>() {
             Ok(day) => match day {
                 1 => day1::run().await,
@@ -30,29 +24,13 @@ pub async fn run() {
                 11 => day11::run().await,
                 12 => day12::run().await,
                 13 => day13::run().await,
-                14..=25 => not_implemented(day),
+                14 => day14::run().await,
+                15..=25 => not_implemented(day),
                 _ => panic!("Invalid day: {day}"),
             },
-            Err(_) => {
-                println!("Could not parse day: '{day}' to int");
-                run_all().await;
-            }
+            Err(_) => println!("Could not parse day: '{day}' to int"),
         },
-    }
-
-    async fn run_all() {
-        println!("Running all");
-        join![
-            day1::run(),
-            day2::run(),
-            day3::run(),
-            day4::run(),
-            day5::run(),
-            day10::run(),
-            day11::run(),
-            day12::run(),
-            day13::run()
-        ];
+        Err(_) => println!("Day not provided"),
     }
 
     fn not_implemented(day: u8) {
