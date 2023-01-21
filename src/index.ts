@@ -2,15 +2,11 @@ import { year2021 } from './y2021';
 import { year2022 } from './y2022';
 
 async function run() {
-  const { YEAR = 'ALL' } = process.env;
+  const { YEAR } = process.env;
 
   console.log(`Run year ${YEAR}`);
 
   switch (YEAR) {
-    case 'ALL':
-      await year2021();
-      await year2022();
-      break;
     case '2015':
     case '2016':
     case '2017':

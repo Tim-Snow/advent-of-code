@@ -10,7 +10,7 @@ import { day8 } from './day8';
 import { day9 } from './day9';
 
 export async function year2021() {
-  const { DAY = 'ALL' } = process.env;
+  const { DAY } = process.env;
 
   console.log(`2021 - Day ${DAY}`);
 
@@ -38,7 +38,7 @@ export async function year2021() {
     case '12':
       throw new Error(`Day ${DAY} has not been implemented`);
     case '13':
-      await day13();
+      return await day13();
     case '14':
     case '15':
     case '16':
@@ -52,18 +52,6 @@ export async function year2021() {
     case '24':
     case '25':
       throw new Error(`Day ${DAY} has not been implemented`);
-    case 'ALL':
-      await day1();
-      await day2();
-      await day3();
-      await day4();
-      await day5();
-      await day6();
-      await day7();
-      await day8();
-      await day9();
-      await day13();
-      break;
     default:
       throw new Error('Invalid day specified');
   }
