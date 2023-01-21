@@ -1,10 +1,7 @@
-import dotenv from 'dotenv';
 import { year2021 } from './y2021';
 import { year2022 } from './y2022';
 
 async function run() {
-  dotenv.config();
-
   const { YEAR = 'ALL' } = process.env;
 
   console.log(`Run year ${YEAR}`);
@@ -32,4 +29,4 @@ async function run() {
   }
 }
 
-(async () => await run())();
+void (async () => await run())();

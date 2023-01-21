@@ -42,5 +42,7 @@ module.exports = {
         multilineDetection: 'brackets',
       },
     ],
+    '@typescript-eslint/no-namespace': 'off',
+    '@typescript-eslint/consistent-type-definitions': [2, 'type'],
   },
 };

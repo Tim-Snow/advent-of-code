@@ -1,4 +1,3 @@
-import { day13 } from './day13';
 import { day6 } from './day6';
 import { day7 } from './day7';
 import { day8 } from './day8';
@@ -26,7 +25,6 @@ export async function year2022() {
     case '11':
     case '12':
     case '13':
-      return await day13();
     case '14':
     case '15':
     case '16':

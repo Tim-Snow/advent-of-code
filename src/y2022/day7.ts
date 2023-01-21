@@ -1,7 +1,9 @@
 import assert from 'assert';
 import { getDayData, getDayTestData } from '../util';
 
+// process.platform
 const OS: 'windows' | 'mac' = 'windows';
+// const OS = process.platform;
 const newline = {
   windows: '\r\n',
   mac: '\n',
@@ -15,17 +17,17 @@ export async function day7() {
     const commands = data
       .split(newline[OS])
       .filter(item => item.startsWith('$'));
-    const output = data.split(/\$.*\r\n/g).filter(v => !(v === '')); // use newline[OS] in regexp
+    const output = data.split(/\$.*\r\n/g).filter(v => !!v); // use newline[OS] in regexp
 
     let outputIter = 0;
-    const currentDirectory: string[] = [];
+    let currentDirectory: string[] = [];
     const directories: Record<string, number> = {};
     const subdirectories: Record<string, string[]> = {};
 
     commands.forEach(evaluateCommand);
 
     function evaluateCommand(command: String) {
-      const com = command.replace('$ ', '');
+      let com = command.replace('$ ', '');
       if (com.startsWith('cd')) {
         changeDirectory(com.replace('cd ', ''));
       } else if (com.startsWith('ls')) {
@@ -39,7 +41,7 @@ export async function day7() {
         currentDirectory.pop();
       } else {
         const keys = Object.keys(directories);
-        if (keys.filter(d => d === dir).length === 0) {
+        if (!keys.filter(d => d === dir).length) {
           directories[dir] = 0;
         }
         currentDirectory.push(dir);
@@ -47,6 +49,8 @@ export async function day7() {
     }
 
     function evaluateOutput(output: String) {
+      if (!output) return;
+
       const contents = output.split(newline[OS]);
 
       contents.forEach(content => {
@@ -58,16 +62,16 @@ export async function day7() {
           currentDirectory[currentDirectory.length - 1];
 
         if (first === 'dir') {
-          if (subdirectories[currentDir] === undefined) {
+          if (!subdirectories[currentDir]) {
             subdirectories[currentDir] = [];
           }
 
           subdirectories[currentDir].push(second);
 
-          if (keys.filter(dir => dir === second).length === 0) {
+          if (!keys.filter(dir => dir === second).length) {
             directories[second] = 0;
           }
-        } else if (first.length !== 0) {
+        } else if (first.length) {
           const size = parseInt(first, 10);
           directories[currentDir] += size;
 
@@ -111,7 +115,7 @@ export async function day7() {
     const testResult = parse(testData);
     assert(testResult === 95437, `Expected: 95437, but was: ${testResult}`);
 
-    console.log(parse(data));
+    // console.log("Part 1: ", parse(data));
   }
 
   function partTwo() {

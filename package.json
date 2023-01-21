@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Advent of code",
   "main": "src/index.ts",
+  "type": "module",
   "private": true,
   "scripts": {
     "ts": "ts-node src/index",
@@ -25,9 +26,11 @@
     "prettier-eslint": "^15.0.1"
   },
   "dependencies": {
+    "chalk": "^5.2.0",
     "dotenv": "^16.0.3",
     "node-fetch": "2",
     "ts-node": "^10.9.1",
-    "typescript": "*"
+    "typescript": "*",
+    "zod": "^3.20.2"
   }
 }
