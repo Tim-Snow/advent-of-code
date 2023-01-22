@@ -1,4 +1,4 @@
-use std::{fs::read_to_string, str::FromStr, time::Instant};
+use std::{str::FromStr, time::Instant};
 
 use crate::util::{get_day_data, log_results};
 

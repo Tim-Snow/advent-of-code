@@ -67,15 +67,12 @@ pub async fn run() {
             .to_string()
     }
 
-    check_results(
-        (part_one(&test_data).to_string(), "2"),
-        (part_two(&test_data).to_string(), "4"),
-    );
+    check_results((part_one(&test_data), "2"), (part_two(&test_data), "4"));
 
     let started = Instant::now();
 
-    let part_one = part_one(&data).to_string();
-    let part_two = part_two(&data).to_string();
+    let part_one = part_one(&data);
+    let part_two = part_two(&data);
 
     log_results(4, 2022, &part_one, &part_two, started);
 
