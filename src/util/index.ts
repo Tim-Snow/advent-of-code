@@ -9,8 +9,8 @@ const envVariables = () => {
   dotenv.config();
 
   return z.object({
-    DAY: z.string(),
-    YEAR: z.string(),
+    DAY: z.coerce.number().min(1).max(25),
+    YEAR: z.coerce.number().min(2015).max(2022),
     USER_AGENT: z.string(),
     COOKIE: z.string(),
   });
@@ -18,7 +18,7 @@ const envVariables = () => {
 
 const envVars = envVariables();
 
-envVars.parse(process.env);
+export const env = envVars.parse(process.env);
 
 declare global {
   namespace NodeJS {
