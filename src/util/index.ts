@@ -27,9 +27,7 @@ declare global {
   }
 }
 
-const { platform } = process;
-
-export const newline = platform === 'win32' ? '\r\n' : '\n';
+export const newline = process.platform === 'win32' ? '\r\n' : '\n';
 
 export function getDayTestData(day: number, year: number): string {
   return fs.readFileSync(

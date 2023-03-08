@@ -8,6 +8,7 @@ mod day2;
 mod day3;
 mod day4;
 mod day5;
+mod day7;
 
 pub async fn run() {
     let day = dotenv::var("DAY");
@@ -20,7 +21,9 @@ pub async fn run() {
                 3 => day3::run().await,
                 4 => day4::run().await,
                 5 => day5::run().await,
-                6..=9 => not_implemented(day),
+                6 => not_implemented(day),
+                7 => day7::run().await,
+                8..=9 => not_implemented(day),
                 10 => day10::run().await,
                 11 => day11::run().await,
                 12 => day12::run().await,
