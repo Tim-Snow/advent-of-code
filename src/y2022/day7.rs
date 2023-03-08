@@ -1,7 +1,8 @@
 use std::{
     cell::RefCell,
-    ops::Sub,
+    ops::{AddAssign, Sub},
     rc::{Rc, Weak},
+    str::FromStr,
     time::Instant,
 };
 
@@ -53,14 +54,45 @@ impl Directory {
         let mut size = 0;
 
         for child in self.children.borrow().iter() {
-            size += child.get_size();
+            size.add_assign(child.get_size());
         }
 
         for file in self.file_sizes.borrow().iter() {
-            size += file;
+            size.add_assign(file);
         }
 
         size
+    }
+}
+
+enum Command {
+    Ls,
+    CdUp,
+    CdRoot,
+    Cd(String),
+}
+
+impl FromStr for Command {
+    type Err = String;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        if s.starts_with("$ ") {
+            if s.eq("$ ls") {
+                return Ok(Command::Ls);
+            }
+            if s.eq("$ cd ..") {
+                return Ok(Command::CdUp);
+            }
+            if s.eq("$ cd /") {
+                return Ok(Command::CdRoot);
+            }
+            if s.starts_with("$ cd") {
+                let to_dir = s.split_whitespace().last().unwrap();
+                return Ok(Command::Cd(to_dir.into()));
+            }
+        }
+
+        Err("Not a command".into())
     }
 }
 
@@ -73,24 +105,19 @@ pub async fn run() {
         let mut current = Rc::clone(&root);
 
         d.lines().for_each(|line| {
-            if line.starts_with('$') {
-                if line.eq("$ cd /") || line.eq("ls") {
-                    return;
-                }
+            if let Ok(command) = line.parse::<Command>() {
+                match command {
+                    Command::Ls => {}
+                    Command::CdRoot => {}
+                    Command::CdUp => current = current.get_parent().unwrap(),
+                    Command::Cd(dir) => {
+                        let child = Rc::new(Directory::new(dir));
 
-                if line.eq("$ cd ..") {
-                    current = current.get_parent().unwrap();
-                    return;
-                }
+                        child.set_parent(Rc::downgrade(&current));
+                        current.add_child(&child);
 
-                if line.starts_with("$ cd") {
-                    let name = line.split_whitespace().last().unwrap();
-                    let child = Rc::new(Directory::new(name.into()));
-
-                    child.set_parent(Rc::downgrade(&current));
-                    current.add_child(&child);
-
-                    current = child;
+                        current = child;
+                    }
                 }
             } else {
                 match line.split_whitespace().next().unwrap().parse::<u32>() {
@@ -131,8 +158,7 @@ pub async fn run() {
         let required_space = 30000000;
 
         let used = root.get_size();
-        let unused = total_space.sub(&used);
-        let to_free = required_space - unused;
+        let to_free = required_space.sub(total_space.sub(used));
 
         fn find_size_of_directories_greater_than(size: &u32, dir: &Directory) -> Vec<u32> {
             let mut accum = vec![];
