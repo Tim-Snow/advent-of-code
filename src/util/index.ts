@@ -4,6 +4,7 @@ import fetch from 'node-fetch';
 import chalk from 'chalk';
 import { z } from 'zod';
 import dotenv from 'dotenv';
+import { EOL } from 'os';
 
 const envVariables = () => {
   dotenv.config();
@@ -27,7 +28,7 @@ declare global {
   }
 }
 
-export const newline = process.platform === 'win32' ? '\r\n' : '\n';
+export const newline = EOL;
 
 export function getDayTestData(day: number, year: number): string {
   return fs.readFileSync(
