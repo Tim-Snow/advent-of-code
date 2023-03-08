@@ -58,10 +58,10 @@ impl Directory {
 }
 
 enum Command {
-    Ls,
-    CdUp,
-    CdRoot,
+    Noop,
+    CdParent,
     Cd(String),
+    LsFileSize(u32),
 }
 
 impl FromStr for Command {
@@ -69,19 +69,20 @@ impl FromStr for Command {
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         if s.starts_with("$ ") {
-            if s.eq("$ ls") {
-                return Ok(Command::Ls);
+            if s.eq("$ ls") || s.eq("$ cd /") {
+                return Ok(Command::Noop);
             }
             if s.eq("$ cd ..") {
-                return Ok(Command::CdUp);
-            }
-            if s.eq("$ cd /") {
-                return Ok(Command::CdRoot);
+                return Ok(Command::CdParent);
             }
             if s.starts_with("$ cd") {
                 let to_dir = s.split_whitespace().last().unwrap();
                 return Ok(Command::Cd(to_dir.into()));
             }
+        }
+
+        if let Ok(size) = s.split_whitespace().next().unwrap().parse::<u32>() {
+            return Ok(Command::LsFileSize(size));
         }
 
         Err("Not a command".into())
@@ -99,9 +100,8 @@ pub async fn run() {
         d.lines().for_each(|line| {
             if let Ok(command) = line.parse::<Command>() {
                 match command {
-                    Command::Ls => {}
-                    Command::CdRoot => {}
-                    Command::CdUp => current = current.get_parent().unwrap(),
+                    Command::LsFileSize(size) => current.add_file_size(size),
+                    Command::CdParent => current = current.get_parent().unwrap(),
                     Command::Cd(dir) => {
                         let child = Rc::new(Directory::new(dir));
 
@@ -110,13 +110,7 @@ pub async fn run() {
 
                         current = child;
                     }
-                }
-            } else {
-                match line.split_whitespace().next().unwrap().parse::<u32>() {
-                    Err(_) => {}
-                    Ok(size) => {
-                        current.add_file_size(size);
-                    }
+                    Command::Noop => {}
                 }
             }
         });
