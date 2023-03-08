@@ -57,32 +57,32 @@ impl Directory {
     }
 }
 
-enum Command {
-    Noop,
+enum Line {
+    NoOp,
     CdParent,
     Cd(String),
     LsFileSize(u32),
 }
 
-impl FromStr for Command {
+impl FromStr for Line {
     type Err = String;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         if s.starts_with("$ ") {
             if s.eq("$ ls") || s.eq("$ cd /") {
-                return Ok(Command::Noop);
+                return Ok(Line::NoOp);
             }
             if s.eq("$ cd ..") {
-                return Ok(Command::CdParent);
+                return Ok(Line::CdParent);
             }
             if s.starts_with("$ cd") {
                 let to_dir = s.split_whitespace().last().unwrap();
-                return Ok(Command::Cd(to_dir.into()));
+                return Ok(Line::Cd(to_dir.into()));
             }
         }
 
         if let Ok(size) = s.split_whitespace().next().unwrap().parse::<u32>() {
-            return Ok(Command::LsFileSize(size));
+            return Ok(Line::LsFileSize(size));
         }
 
         Err("Not a command".into())
@@ -98,11 +98,11 @@ pub async fn run() {
         let mut current = Rc::clone(&root);
 
         d.lines().for_each(|line| {
-            if let Ok(command) = line.parse::<Command>() {
+            if let Ok(command) = line.parse::<Line>() {
                 match command {
-                    Command::LsFileSize(size) => current.add_file_size(size),
-                    Command::CdParent => current = current.get_parent().unwrap(),
-                    Command::Cd(dir) => {
+                    Line::LsFileSize(size) => current.add_file_size(size),
+                    Line::CdParent => current = current.get_parent().unwrap(),
+                    Line::Cd(dir) => {
                         let child = Rc::new(Directory::new(dir));
 
                         child.set_parent(Rc::downgrade(&current));
@@ -110,7 +110,7 @@ pub async fn run() {
 
                         current = child;
                     }
-                    Command::Noop => {}
+                    _ => {}
                 }
             }
         });
