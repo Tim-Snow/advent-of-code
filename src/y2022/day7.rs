@@ -39,15 +39,7 @@ impl Directory {
     }
 
     fn add_file_size(&self, size: u32) {
-        let mut file_sizes = vec![];
-
-        for s in self.file_sizes.borrow().iter() {
-            file_sizes.push(*s);
-        }
-
-        file_sizes.push(size);
-
-        *self.file_sizes.borrow_mut() = file_sizes;
+        self.file_sizes.borrow_mut().push(size);
     }
 
     fn get_size(&self) -> u32 {
