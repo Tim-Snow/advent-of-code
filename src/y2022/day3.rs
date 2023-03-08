@@ -7,10 +7,10 @@ pub async fn run() {
     let test_data = get_day_test_data(3, 2022);
 
     fn char_priority(c: char) -> u8 {
-        if c.is_uppercase() {
-            return (c as u8) - 38u8;
+        match c.is_uppercase() {
+            true => (c as u8) - 38u8,
+            false => (c as u8) - 96u8,
         }
-        (c as u8) - 96u8
     }
 
     fn part_one(d: &str) -> String {
