@@ -18,23 +18,24 @@ impl Coord {
         Coord { x: 0, y: 0 }
     }
 
-    fn add(&mut self, x: i16, y: i16) {
+    fn add(&mut self, x: i16, y: i16) -> Self {
         self.x.add_assign(x);
         self.y.add_assign(y);
+
+        *self
     }
 
     fn approach(&mut self, other: &Coord) -> Self {
         let (dx, dy) = match (self.x.abs_diff(other.x), self.y.abs_diff(other.y)) {
-            (2, 0) => ((other.x.sub(self.x)).div(2), 0),
-            (2, 1) => ((other.x.sub(self.x)).div(2), (other.y.sub(self.y))),
             (0, 2) => (0, (other.y.sub(self.y)).div(2)),
+            (2, 0) => ((other.x.sub(self.x)).div(2), 0),
             (1, 2) => ((other.x.sub(self.x)), (other.y.sub(self.y)).div(2)),
+            (2, 1) => ((other.x.sub(self.x)).div(2), (other.y.sub(self.y))),
             (2, 2) => ((other.x.sub(self.x)).div(2), (other.y.sub(self.y)).div(2)),
             _ => (0, 0),
         };
 
-        self.x.add_assign(dx);
-        self.y.add_assign(dy);
+        self.add(dx, dy);
 
         *self
     }
@@ -54,7 +55,7 @@ impl Rope {
         }
     }
 
-    fn move_head(&mut self, instruction: Instruction) {
+    fn update(&mut self, instruction: Instruction) {
         let (dx, dy, amount) = match instruction {
             Instruction::Right(amount) => (1, 0, amount),
             Instruction::Left(amount) => (-1, 0, amount),
@@ -63,11 +64,11 @@ impl Rope {
         };
 
         for _ in 0..amount {
-            self.knots.first_mut().unwrap().add(dx, dy);
+            let mut next_position = self.knots.first_mut().unwrap().add(dx, dy);
 
-            let mut next_position = *self.knots.first().unwrap();
             for knot in self.knots[1..].iter_mut() {
                 let new_position = knot.approach(&next_position);
+
                 *knot = new_position;
                 next_position = new_position;
             }
@@ -77,14 +78,12 @@ impl Rope {
     }
 
     fn number_unique_tail_positions(&self) -> usize {
-        let unique = self
-            .history
+        self.history
             .clone()
             .into_iter()
             .collect::<HashSet<_>>()
-            .into_iter();
-
-        unique.len()
+            .into_iter()
+            .len()
     }
 }
 
@@ -130,7 +129,7 @@ pub async fn run() {
 
         d.lines().for_each(|line| {
             let instruction: Instruction = line.parse().expect("Input is parsable");
-            rope.move_head(instruction);
+            rope.update(instruction);
         });
 
         rope
