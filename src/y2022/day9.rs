@@ -87,7 +87,7 @@ impl Rope {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, Copy)]
 enum Instruction {
     Right(u8),
     Left(u8),
@@ -121,27 +121,32 @@ impl FromStr for Instruction {
 }
 
 pub async fn run() {
-    let data = get_day_data(9, 2022).await;
-    let test_data = get_day_test_data(9, 2022);
+    let data = parse(get_day_data(9, 2022).await);
+    let test_data = parse(get_day_test_data(9, 2022));
 
-    fn parse(d: &str, length: u8) -> Rope {
+    fn parse(d: String) -> Vec<Instruction> {
+        d.lines()
+            .map(|line| line.parse().expect("Input is parsable"))
+            .collect()
+    }
+
+    fn simulate(length: u8, instructions: &Vec<Instruction>) -> Rope {
         let mut rope = Rope::new(length);
 
-        d.lines().for_each(|line| {
-            let instruction: Instruction = line.parse().expect("Input is parsable");
-            rope.update(instruction);
-        });
+        for instruction in instructions {
+            rope.update(*instruction);
+        }
 
         rope
     }
 
-    fn part_one(d: &str) -> String {
-        let rope = parse(d, 2);
+    fn part_one(instructions: &Vec<Instruction>) -> String {
+        let rope = simulate(2, instructions);
         rope.number_unique_tail_positions().to_string()
     }
 
-    fn part_two(d: &str) -> String {
-        let rope = parse(d, 10);
+    fn part_two(instructions: &Vec<Instruction>) -> String {
+        let rope = simulate(10, instructions);
         rope.number_unique_tail_positions().to_string()
     }
 
