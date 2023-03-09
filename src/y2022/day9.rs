@@ -1,4 +1,9 @@
-use std::{collections::HashSet, ops::AddAssign, str::FromStr, time::Instant};
+use std::{
+    collections::HashSet,
+    ops::{AddAssign, Div, Sub},
+    str::FromStr,
+    time::Instant,
+};
 
 use crate::util::{check_results, get_day_data, get_day_test_data, log_results};
 
@@ -13,78 +18,65 @@ impl Coord {
         Coord { x: 0, y: 0 }
     }
 
-    fn approach(&mut self, other: &Coord) {
-        match (self.x.abs_diff(other.x), self.y.abs_diff(other.y)) {
-            (2, 0) => self.x.add_assign((other.x - self.x) / 2),
-            (2, 1) => {
-                self.x.add_assign((other.x - self.x) / 2);
-                self.y.add_assign(other.y - self.y);
-            }
-            (0, 2) => self.y.add_assign((other.y - self.y) / 2),
-            (1, 2) => {
-                self.x.add_assign(other.x - self.x);
-                self.y.add_assign((other.y - self.y) / 2);
-            }
-            _ => {}
-        }
+    fn approach(&mut self, other: &Coord) -> Self {
+        let (dx, dy) = match (self.x.abs_diff(other.x), self.y.abs_diff(other.y)) {
+            (2, 0) => ((other.x.sub(self.x)).div(2), 0),
+            (2, 1) => ((other.x.sub(self.x)).div(2), (other.y.sub(self.y))),
+            (0, 2) => (0, (other.y.sub(self.y)).div(2)),
+            (1, 2) => ((other.x.sub(self.x)), (other.y.sub(self.y)).div(2)),
+            (2, 2) => ((other.x.sub(self.x)).div(2), (other.y.sub(self.y)).div(2)),
+            _ => (0, 0),
+        };
+
+        self.x.add_assign(dx);
+        self.y.add_assign(dy);
+
+        *self
     }
 }
 
 #[derive(Debug)]
-struct HeadTail {
-    head: Coord,
-    tail: Coord,
+struct Rope {
+    head: Coord, // TODO: head can just be the first element of tail
+    tail: Vec<Coord>,
     positions: Vec<Coord>,
 }
 
-impl HeadTail {
-    fn new() -> Self {
-        HeadTail {
+impl Rope {
+    fn new(length: u8) -> Self {
+        Rope {
             head: Coord::new(),
-            tail: Coord::new(),
+            tail: vec![Coord::new(); length.into()],
             positions: vec![],
         }
     }
 
     fn move_head(&mut self, instruction: Instruction) {
-        match instruction {
-            Instruction::Right(amount) => {
-                for _ in 0..amount {
-                    self.head.x += 1;
-                    self.tail.approach(&self.head);
-                    self.positions.push(self.tail);
-                }
-            }
-            Instruction::Left(amount) => {
-                for _ in 0..amount {
-                    self.head.x -= 1;
-                    self.tail.approach(&self.head);
-                    self.positions.push(self.tail);
-                }
-            }
-            Instruction::Up(amount) => {
-                for _ in 0..amount {
-                    self.head.y += 1;
-                    self.tail.approach(&self.head);
-                    self.positions.push(self.tail);
-                }
-            }
-            Instruction::Down(amount) => {
-                for _ in 0..amount {
-                    self.head.y -= 1;
-                    self.tail.approach(&self.head);
-                    self.positions.push(self.tail);
-                }
-            }
+        let (dx, dy, amount) = match instruction {
+            Instruction::Right(amount) => (1, 0, amount),
+            Instruction::Left(amount) => (-1, 0, amount),
+            Instruction::Up(amount) => (0, 1, amount),
+            Instruction::Down(amount) => (0, -1, amount),
+        };
+
+        for _ in 0..amount {
+            self.head.x += dx;
+            self.head.y += dy;
+            self.update_tail();
+            self.positions.push(*self.tail.last().unwrap());
         }
     }
 
-    // fn _distance_between(&self) -> u8 {
-    //     let x_dist: u8 = self.head.x.abs_diff(self.tail.x);
-    //     let y_dist: u8 = self.head.x.abs_diff(self.tail.y);
+    fn update_tail(&mut self) {
+        let mut new_tail: Vec<Coord> = vec![];
+        new_tail.push(self.tail.first_mut().unwrap().approach(&self.head));
 
-    //     u8::max(x_dist, y_dist)
-    // }
+        for item in self.tail[1..].iter_mut() {
+            new_tail.push(item.approach(new_tail.last().unwrap()));
+        }
+
+        self.tail = new_tail;
+    }
 
     fn number_unique_tail_positions(&self) -> usize {
         let unique = self
@@ -135,28 +127,28 @@ pub async fn run() {
     let data = get_day_data(9, 2022).await;
     let test_data = get_day_test_data(9, 2022);
 
-    fn parse(d: &str) -> HeadTail {
-        let mut head_tail = HeadTail::new();
+    fn parse(d: &str, length: u8) -> Rope {
+        let mut rope = Rope::new(length);
 
         d.lines().for_each(|line| {
             let instruction: Instruction = line.parse().expect("Input is parsable");
-            head_tail.move_head(instruction);
+            rope.move_head(instruction);
         });
 
-        head_tail
+        rope
     }
 
     fn part_one(d: &str) -> String {
-        let head_tail = parse(d);
-        head_tail.number_unique_tail_positions().to_string()
+        let rope = parse(d, 1);
+        rope.number_unique_tail_positions().to_string()
     }
 
-    fn part_two(_d: &str) -> String {
-        // parse(d);
-        String::default()
+    fn part_two(d: &str) -> String {
+        let rope = parse(d, 9);
+        rope.number_unique_tail_positions().to_string()
     }
 
-    check_results((part_one(&test_data), "13"), (part_two(&test_data), ""));
+    check_results((part_one(&test_data), "88"), (part_two(&test_data), "36"));
 
     println!("Tests passed");
 
@@ -167,5 +159,5 @@ pub async fn run() {
 
     log_results(9, 2022, &part_one, &part_two, started);
 
-    check_results((part_one, "6256"), (part_two, ""));
+    check_results((part_one, "6256"), (part_two, "2665"));
 }
