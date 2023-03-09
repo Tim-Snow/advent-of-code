@@ -18,6 +18,11 @@ impl Coord {
         Coord { x: 0, y: 0 }
     }
 
+    fn add(&mut self, x: i16, y: i16) {
+        self.x.add_assign(x);
+        self.y.add_assign(y);
+    }
+
     fn approach(&mut self, other: &Coord) -> Self {
         let (dx, dy) = match (self.x.abs_diff(other.x), self.y.abs_diff(other.y)) {
             (2, 0) => ((other.x.sub(self.x)).div(2), 0),
@@ -58,14 +63,13 @@ impl Rope {
         };
 
         for _ in 0..amount {
-            self.knots.first_mut().unwrap().x += dx;
-            self.knots.first_mut().unwrap().y += dy;
+            self.knots.first_mut().unwrap().add(dx, dy);
 
-            let mut last_position = *self.knots.first().unwrap();
+            let mut next_position = *self.knots.first().unwrap();
             for knot in self.knots[1..].iter_mut() {
-                let new_position = knot.approach(&last_position);
+                let new_position = knot.approach(&next_position);
                 *knot = new_position;
-                last_position = new_position;
+                next_position = new_position;
             }
 
             self.history.push(*self.knots.last().unwrap());
