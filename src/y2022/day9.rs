@@ -37,17 +37,15 @@ impl Coord {
 
 #[derive(Debug)]
 struct Rope {
-    head: Coord, // TODO: head can just be the first element of tail
-    tail: Vec<Coord>,
-    positions: Vec<Coord>,
+    knots: Vec<Coord>,
+    history: Vec<Coord>,
 }
 
 impl Rope {
     fn new(length: u8) -> Self {
         Rope {
-            head: Coord::new(),
-            tail: vec![Coord::new(); length.into()],
-            positions: vec![],
+            knots: vec![Coord::new(); length.into()],
+            history: vec![],
         }
     }
 
@@ -60,27 +58,25 @@ impl Rope {
         };
 
         for _ in 0..amount {
-            self.head.x += dx;
-            self.head.y += dy;
-            self.update_tail();
-            self.positions.push(*self.tail.last().unwrap());
+            self.knots.first_mut().unwrap().x += dx;
+            self.knots.first_mut().unwrap().y += dy;
+
+            let mut new_tail: Vec<Coord> = vec![];
+            new_tail.push(*self.knots.first().unwrap());
+
+            for knot in self.knots[1..].iter_mut() {
+                new_tail.push(knot.approach(new_tail.last().unwrap()));
+            }
+
+            self.knots = new_tail;
+
+            self.history.push(*self.knots.last().unwrap());
         }
-    }
-
-    fn update_tail(&mut self) {
-        let mut new_tail: Vec<Coord> = vec![];
-        new_tail.push(self.tail.first_mut().unwrap().approach(&self.head));
-
-        for item in self.tail[1..].iter_mut() {
-            new_tail.push(item.approach(new_tail.last().unwrap()));
-        }
-
-        self.tail = new_tail;
     }
 
     fn number_unique_tail_positions(&self) -> usize {
         let unique = self
-            .positions
+            .history
             .clone()
             .into_iter()
             .collect::<HashSet<_>>()
@@ -139,18 +135,16 @@ pub async fn run() {
     }
 
     fn part_one(d: &str) -> String {
-        let rope = parse(d, 1);
+        let rope = parse(d, 2);
         rope.number_unique_tail_positions().to_string()
     }
 
     fn part_two(d: &str) -> String {
-        let rope = parse(d, 9);
+        let rope = parse(d, 10);
         rope.number_unique_tail_positions().to_string()
     }
 
     check_results((part_one(&test_data), "88"), (part_two(&test_data), "36"));
-
-    println!("Tests passed");
 
     let started = Instant::now();
 
