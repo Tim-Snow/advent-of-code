@@ -30,8 +30,8 @@ impl Directory {
         self.parent.borrow().upgrade()
     }
 
-    fn set_parent(&self, parent: Weak<Directory>) {
-        *self.parent.borrow_mut() = parent;
+    fn set_parent(&self, parent: &Rc<Directory>) {
+        *self.parent.borrow_mut() = Rc::downgrade(parent);
     }
 
     fn add_child(&self, child: &Rc<Directory>) {
@@ -105,12 +105,12 @@ pub async fn run() {
                     Line::Cd(dir) => {
                         let child = Rc::new(Directory::new(dir));
 
-                        child.set_parent(Rc::downgrade(&current));
+                        child.set_parent(&current);
                         current.add_child(&child);
 
                         current = child;
                     }
-                    _ => {}
+                    Line::NoOp => {}
                 }
             }
         });
