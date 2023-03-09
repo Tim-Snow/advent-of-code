@@ -61,14 +61,12 @@ impl Rope {
             self.knots.first_mut().unwrap().x += dx;
             self.knots.first_mut().unwrap().y += dy;
 
-            let mut new_tail: Vec<Coord> = vec![];
-            new_tail.push(*self.knots.first().unwrap());
-
+            let mut last_position = *self.knots.first().unwrap();
             for knot in self.knots[1..].iter_mut() {
-                new_tail.push(knot.approach(new_tail.last().unwrap()));
+                let new_position = knot.approach(&last_position);
+                *knot = new_position;
+                last_position = new_position;
             }
-
-            self.knots = new_tail;
 
             self.history.push(*self.knots.last().unwrap());
         }
