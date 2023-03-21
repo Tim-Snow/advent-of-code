@@ -140,8 +140,8 @@ pub async fn run() {
 
     fn part_two(d: &str) -> String {
         let root = parse(d);
-        let total_space = 70000000;
-        let required_space = 30000000;
+        let total_space = 70_000_000;
+        let required_space = 30_000_000;
 
         let used = root.get_size();
         let to_free = required_space.sub(total_space.sub(used));
