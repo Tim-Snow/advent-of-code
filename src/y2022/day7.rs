@@ -151,14 +151,13 @@ pub async fn run() {
 
             if dir.get_size().gt(size) {
                 accum.push(dir.get_size());
-            }
 
-            for child in dir.children.borrow().iter() {
-                if child.get_size().gt(size) {
-                    accum.push(child.get_size());
+                for child in dir.children.borrow().iter() {
+                    if child.get_size().gt(size) {
+                        accum.push(child.get_size());
+                        accum.append(&mut find_size_of_directories_greater_than(size, child));
+                    }
                 }
-
-                accum.append(&mut find_size_of_directories_greater_than(size, child));
             }
 
             accum
