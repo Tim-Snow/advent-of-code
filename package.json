@@ -8,8 +8,7 @@
   "scripts": {
     "ts": "ts-node src/index",
     "ts-lint": "eslint && prettier --check .",
-    "ts-lint-fix": "prettier --write .",
-    "rust": "cargo run"
+    "ts-lint-fix": "prettier --write ."
   },
   "devDependencies": {
     "@types/node": "^18.11.17",
