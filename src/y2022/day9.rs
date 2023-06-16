@@ -130,24 +130,22 @@ pub async fn run() {
             .collect()
     }
 
-    fn simulate(length: u8, instructions: &Vec<Instruction>) -> Rope {
+    fn simulate(length: u8, instructions: &Vec<Instruction>) -> String {
         let mut rope = Rope::new(length);
 
         for instruction in instructions {
             rope.update(*instruction);
         }
 
-        rope
+        rope.number_unique_tail_positions().to_string()
     }
 
     fn part_one(instructions: &Vec<Instruction>) -> String {
-        let rope = simulate(2, instructions);
-        rope.number_unique_tail_positions().to_string()
+        simulate(2, instructions)
     }
 
     fn part_two(instructions: &Vec<Instruction>) -> String {
-        let rope = simulate(10, instructions);
-        rope.number_unique_tail_positions().to_string()
+        simulate(10, instructions)
     }
 
     check_results((part_one(&test_data), "88"), (part_two(&test_data), "36"));
