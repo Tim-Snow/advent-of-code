@@ -13,17 +13,9 @@ export async function day6() {
 
   function simulateDay(data: number[]) {
     const birthing = data.shift() || 0;
-    return [
-      data[0],
-      data[1],
-      data[2],
-      data[3],
-      data[4],
-      data[5],
-      data[6] + birthing,
-      data[7],
-      birthing,
-    ];
+    data[6] += birthing;
+    data.push(birthing);
+    return data;
   }
 
   let data = await loadData();
