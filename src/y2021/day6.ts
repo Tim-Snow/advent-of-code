@@ -6,12 +6,7 @@ export async function day6() {
       .split(',')
       .map(stringToInt)
       .reduce(
-        (p, c) => {
-          const before = p.slice(0, c);
-          const cur = p[c];
-          const after = p.slice(c + 1);
-          return [...before, cur + 1, ...after];
-        },
+        (p, c) => p.map((v, i) => (i === c ? v + 1 : v)),
         [0, 0, 0, 0, 0, 0, 0, 0, 0],
       );
   }
