@@ -6,13 +6,12 @@ export async function day7() {
   const [min, max] = [Math.min(...data), Math.max(...data)];
 
   const triangleNumber = (num: number) => (num * (num + 1)) / 2;
-  const distance = (from: number, to: number) =>
-    from > to ? from - to : to - from;
+  
   const sumDistances = (nodes: number[], to: number) =>
     nodes.reduce(
       ([sum1, sum2], from) => {
-        const dist = distance(from, to);
-        return [sum1 + dist, sum2 + triangleNumber(dist)];
+        const distance = Math.abs(from - to);
+        return [sum1 + dist, sum2 + triangleNumber(distance)];
       },
       [0, 0],
     );
