@@ -48,7 +48,7 @@ pub async fn run() {
                 let mut last_digit: Option<u8> = None;
 
                 for (index, _char) in curr.chars().enumerate() {
-                    let slice = &curr[index..curr.len()];
+                    let slice = &curr[index..];
 
                     numbers_map.map(|(number_string, number_value)| {
                         if slice.starts_with(number_string) {
