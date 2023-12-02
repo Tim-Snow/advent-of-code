@@ -61,7 +61,6 @@ pub async fn run() {
                 }
 
                 let concatenated = format!("{:?}{:?}", first_digit.unwrap(), last_digit.unwrap());
-                dbg!(first_digit, last_digit, &concatenated);
 
                 acc + concatenated.parse::<u16>().unwrap()
             })
