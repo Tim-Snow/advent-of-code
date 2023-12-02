@@ -3,7 +3,6 @@ mod day10;
 mod day11;
 mod day12;
 mod day13;
-mod day14;
 mod day2;
 mod day3;
 mod day4;
@@ -30,7 +29,7 @@ pub async fn run() {
                 11 => day11::run().await,
                 12 => day12::run().await,
                 13 => day13::run().await,
-                14 => day14::run().await,
+                14 => not_implemented(day),
                 15..=25 => not_implemented(day),
                 _ => panic!("Invalid day: {day}"),
             },
