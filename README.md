@@ -7,8 +7,8 @@
 Create a `.env` file containing the following environment variables:
 
 ```sh
-DAY="" # The day to run, 1-25
-YEAR="" # The year to run, 2015-2022
+DAY="" # The day to run, 1 - 25
+YEAR="" # The year to run, 2015 - Current year
 USER_AGENT="" # Your email address
 COOKIE="" # Your session cookie header, inspect network logs in browser to find yours
 ```
