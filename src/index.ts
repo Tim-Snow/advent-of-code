@@ -1,6 +1,7 @@
 import { env } from './util';
 import { year2021 } from './y2021';
 import { year2022 } from './y2022';
+import { year2023 } from './y2023';
 
 async function run() {
   const { YEAR } = env;
@@ -18,6 +19,9 @@ async function run() {
       break;
     case 2022:
       await year2022();
+      break;
+    case 2023:
+      await year2023();
       break;
     default:
       throw new Error(`Invalid year specified: ${YEAR}`);

@@ -1,6 +1,7 @@
 mod util;
 mod y2021;
 mod y2022;
+mod y2023;
 
 #[tokio::main]
 async fn main() {
@@ -14,6 +15,7 @@ async fn main() {
                 2015..=2020 => unimplemented!("Year {year} not implemented"),
                 2021 => y2021::run().await,
                 2022 => y2022::run().await,
+                2023 => y2023::run().await,
                 _ => panic!("Invalid year: {year}"),
             },
             Err(_) => println!("Could not parse year: '{year}' to int"),
