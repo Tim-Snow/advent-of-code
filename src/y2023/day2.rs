@@ -1,4 +1,8 @@
-use std::{str::FromStr, time::Instant};
+use std::{
+    ops::{AddAssign, MulAssign},
+    str::FromStr,
+    time::Instant,
+};
 
 use crate::util::{check_results, get_day_data, get_day_test_data, log_results};
 
@@ -11,6 +15,16 @@ struct Bag {
 impl Bag {
     fn under_limit(&self) -> bool {
         self.red_cubes.le(&12) && self.green_cubes.le(&13) && self.blue_cubes.le(&14)
+    }
+
+    fn cube_power(&self) -> u32 {
+        let mut res = u32::MIN;
+
+        res.add_assign(u32::from(self.red_cubes));
+        res.mul_assign(u32::from(self.green_cubes));
+        res.mul_assign(u32::from(self.blue_cubes));
+
+        res
     }
 }
 
@@ -83,11 +97,17 @@ pub async fn run() {
             .to_string()
     }
 
-    fn part_two(_d: &str) -> String {
-        String::default()
+    fn part_two(d: &str) -> String {
+        d.lines()
+            .fold(u32::MIN, |acc, curr| {
+                let game = curr.parse::<Game>().unwrap();
+
+                acc + game.bag_maxes.cube_power()
+            })
+            .to_string()
     }
 
-    check_results((part_one(&test_data), "8"), (part_two(&test_data), ""));
+    check_results((part_one(&test_data), "8"), (part_two(&test_data), "2286"));
 
     let started = Instant::now();
 
@@ -96,5 +116,5 @@ pub async fn run() {
 
     log_results(2, 2023, &part_one, &part_two, started);
 
-    check_results((part_one, ""), (part_two, ""));
+    check_results((part_one, "2505"), (part_two, "70265"));
 }
