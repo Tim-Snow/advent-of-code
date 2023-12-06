@@ -1,6 +1,7 @@
 mod day1;
 mod day2;
 mod day4;
+mod day6;
 
 pub async fn run() {
     let day = dotenv::var("DAY");
@@ -12,7 +13,9 @@ pub async fn run() {
                 2 => day2::run().await,
                 3 => not_implemented(day),
                 4 => day4::run().await,
-                5..=25 => not_implemented(day),
+                5 => not_implemented(day),
+                6 => day6::run().await,
+                7..=25 => not_implemented(day),
                 _ => panic!("Invalid day: {day}"),
             },
             Err(_) => println!("Could not parse day: '{day}' to int"),
