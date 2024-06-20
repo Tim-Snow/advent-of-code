@@ -11,9 +11,9 @@ func check(e error) {
 	}
 }
 
-func assert(cond bool, msg string) {
-	if !cond {
-		panic("Assertion failure! " + msg)
+func assert[T comparable](actual T, expected T) {
+	if actual != expected {
+		panic(fmt.Sprintf("expected (%+v) is not equal to actual (%+v)", expected, actual))
 	}
 }
 
@@ -24,11 +24,11 @@ func Day1() {
 	check(err)
 
 	p1 := part1(test_data)
-	assert(p1 == 3, fmt.Sprintf("Part 1, expected 3, got %d", p1))
+	assert(p1, 3)
 	fmt.Printf("Part 1: %d\n", part1(data))
 
 	p2 := part2(test_data)
-	assert(p2 == 1, fmt.Sprintf("Part 2, expected 1, got %d", p2))
+	assert(p2, 1)
 	fmt.Printf("Part 2: %d\n", part2(data))
 }
 
