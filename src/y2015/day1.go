@@ -2,43 +2,18 @@ package y2015
 
 import (
 	"fmt"
-	"os"
-	"time"
+	"util"
 )
 
-func check(e error) {
-	if e != nil {
-		panic(e)
-	}
-}
-
-func assert[T comparable](actual T, expected T) {
-	if actual != expected {
-		panic(fmt.Sprintf("expected (%+v) is not equal to actual (%+v)", expected, actual))
-	}
-}
-
-func track() time.Time {
-	return time.Now()
-}
-
-func duration(start time.Time) {
-	fmt.Printf("Execution time: %v\n", time.Since(start))
-}
-
 func Day1() {
-	test_data, err := os.ReadFile("../res/2015/1.test.txt")
-	check(err)
-	data, err := os.ReadFile("../res/2015/1.txt")
-	check(err)
+	test_data := util.GetDayTestData()
 
-	p1 := part1(test_data)
-	assert(p1, 3)
+	data := util.GetDayData()
 
-	p2 := part2(test_data)
-	assert(p2, 1)
+	util.Assert(part1(test_data), 3)
+	util.Assert(part2(test_data), 1)
 
-	defer duration(track())
+	defer util.Duration(util.Track())
 
 	fmt.Printf("Part 1: %d\n", part1(data))
 	fmt.Printf("Part 2: %d\n", part2(data))
