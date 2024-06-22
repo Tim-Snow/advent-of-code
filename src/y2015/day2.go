@@ -10,7 +10,10 @@ import (
 
 func Day2() {
 	test_data := util.GetDayTestData()
-	data := util.GetDayData()
+
+	c := make(chan []byte)
+	go util.GetDayData(c)
+	data := <-c
 
 	util.Assert(day2_part1(test_data), 58)
 	util.Assert(day2_part2(test_data), 34)

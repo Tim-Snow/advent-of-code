@@ -8,7 +8,9 @@ import (
 func Day1() {
 	test_data := util.GetDayTestData()
 
-	data := util.GetDayData()
+	c := make(chan []byte)
+	go util.GetDayData(c)
+	data := <-c
 
 	util.Assert(part1(test_data), 3)
 	util.Assert(part2(test_data), 1)

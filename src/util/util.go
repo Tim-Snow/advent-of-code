@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-func GetDayData() []byte {
+func GetDayData(c chan<- []byte) {
 	data, err := os.ReadFile(fmt.Sprintf("../res/%s/%s.txt", os.Getenv("YEAR"), os.Getenv("DAY")))
 
 	if err != nil {
@@ -19,8 +19,6 @@ func GetDayData() []byte {
 		req.Header.Set("Cookie", fmt.Sprintf("session=%s", os.Getenv("COOKIE")))
 		req.Header.Set("User-Agent", os.Getenv("USER_AGENT"))
 
-		println(req.Header.Get("Cookie"))
-
 		res, err := client.Do(req)
 		Check(err)
 
@@ -28,9 +26,11 @@ func GetDayData() []byte {
 		Check(err)
 
 		Check(os.WriteFile(fmt.Sprintf("../res/%s/%s.txt", os.Getenv("YEAR"), os.Getenv("DAY")), body, 0644))
-	}
 
-	return data
+		c <- body
+	} else {
+		c <- data
+	}
 }
 
 func GetDayTestData() []byte {
