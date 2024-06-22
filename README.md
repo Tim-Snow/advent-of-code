@@ -19,4 +19,4 @@ To run rust solutions use: `cargo run`
 
 To run typescript solutions use: `yarn ts`
 
-To run go solutions use: `go run .` within the src directory (WIP.. still figuring this language out!)
+To run go solutions use: `./go-run.sh` (this saves you needing to change to the src directory before running `go run .`)
