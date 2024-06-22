@@ -5,6 +5,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -25,9 +26,11 @@ func GetDayData(c chan<- []byte) {
 		body, err := io.ReadAll(res.Body)
 		Check(err)
 
-		Check(os.WriteFile(fmt.Sprintf("../res/%s/%s.txt", os.Getenv("YEAR"), os.Getenv("DAY")), body, 0644))
+		trimmed := []byte(strings.Trim(string(body), "\r\n"))
 
-		c <- body
+		Check(os.WriteFile(fmt.Sprintf("../res/%s/%s.txt", os.Getenv("YEAR"), os.Getenv("DAY")), trimmed, 0644))
+
+		c <- trimmed
 	} else {
 		c <- data
 	}

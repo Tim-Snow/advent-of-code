@@ -17,6 +17,8 @@ func Day4() {
 
 	util.Assert(day4_part1(test_data), 609043)
 
+	defer util.Duration(util.Track())
+
 	fmt.Printf("Part 1: %d\n", day4_part1(data))
 	fmt.Printf("Part 2: %d\n", day4_part2(data))
 }
