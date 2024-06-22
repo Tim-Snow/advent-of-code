@@ -13,6 +13,8 @@ func Run() {
 		Day1()
 	case "2":
 		Day2()
+	case "3":
+		Day3()
 	default:
 		panic(fmt.Sprintf("Day %s not yet implemented!", day))
 	}
